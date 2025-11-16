@@ -4,7 +4,7 @@ from OpenGL.GLU import *  # type: ignore
 from source.objetos.objeto import Objeto
 from source.objetos.kevin import Kevin
 from source.objetos.don_corru import DonCorru
-from source.objetos.dodecaedro import Dodecaedro
+from source.objetos.kenny import Kenny
 import utils.estado as est
 
 
@@ -86,7 +86,7 @@ class Menu:
 		
 		self.kevin = Kevin()
 		self.don_corru = DonCorru()
-		self.kenny = Dodecaedro()  # Placeholder: usando dodecaedro como cubo
+		self.kenny = Kenny()  # Placeholder: usando dodecaedro como cubo
 
 	def _on_jugar(self):
 		if self.on_jugar:
@@ -133,6 +133,15 @@ class Menu:
 	def handle_click(self, x, y):
 		"""Maneja el click del mouse"""
 		buttons = self.buttons_main if self.state == est.estados_juego[0] else self.buttons_personaje
+		for button in buttons:
+			if button.contains_point(x, y):
+				button.click()
+				break
+		
+		if self.state == est.estados_juego[1]:
+			buttons = self.buttons_personaje
+		elif self.state == est.estados_juego[2]:
+			buttons = self.buttons_niveles
 		
 		for button in buttons:
 			if button.contains_point(x, y):
@@ -142,23 +151,23 @@ class Menu:
 	def draw(self, width, height):
 		if not self.active:
 			return
-
+		
+		if self.state == est.estados_juego[1]:
+			self._draw_personajes_3d(width, height)
+		
 		glMatrixMode(GL_PROJECTION)
 		glPushMatrix()
 		glLoadIdentity()
 		glOrtho(-width/2, width/2, -height/2, height/2, -1, 1)
-		
 		glMatrixMode(GL_MODELVIEW)
 		glPushMatrix()
 		glLoadIdentity()
-
 		glDisable(GL_LIGHTING)
 		glDisable(GL_TEXTURE_2D)
 		glDisable(GL_DEPTH_TEST)
-
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-		glColor4f(0, 0, 0, 0.7)
+		glColor4f(0, 0, 0, 0.2)
 		glBegin(GL_QUADS)
 		glVertex2f(-width/2, -height/2)
 		glVertex2f(width/2, -height/2)
@@ -166,9 +175,7 @@ class Menu:
 		glVertex2f(-width/2, height/2)
 		glEnd()
 		glDisable(GL_BLEND)
-
 		glColor3f(1.0, 1.0, 1.0)
-		# title = "MENU PRINCIPAL" if self.state == est.estados_juego[0] else "SELECCIONAR PERSONAJE"
 		title = ""
 		if self.state == est.estados_juego[0]:
 			title = "MENU PRINCIPAL"
@@ -187,7 +194,6 @@ class Menu:
 		elif self.state == est.estados_juego[1]:
 			for button in self.buttons_personaje:
 				button.draw_2d()
-			self._draw_personaje_labels(width, height)
 		elif self.state == est.estados_juego[2]:
 			for button in self.buttons_niveles:
 				button.draw_2d()
@@ -199,16 +205,43 @@ class Menu:
 		glMatrixMode(GL_MODELVIEW)
 		glEnable(GL_LIGHTING)
 
-	def _draw_personaje_labels(self, width, height):
-		personajes = ["Kevin", "Don Corru", "Kenny"]
+	def _draw_personajes_3d(self, width, height):
+		preview_size = 120
 		positions = [
-			(-200, 80),
-			(0, 80),
-			(200, 80),
+			(-200, -80, self.kevin),
+			(0, -80, self.don_corru),
+			(200, -80, self.kenny),
 		]
 		
-		for personaje, pos in zip(personajes, positions):
-			glColor3f(0.7, 0.9, 1.0)
-			glRasterPos2f(pos[0] - len(personaje) * 3, pos[1])
-			for char in personaje:
-				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ord(char)) # pyright: ignore[reportUndefinedVariable]
+		for pos_x, pos_y, modelo in positions:
+			viewport_x = int(width/2 + pos_x - preview_size/2)
+			viewport_y = int(height/2 - pos_y - preview_size/2)
+			glViewport(viewport_x, viewport_y, preview_size, preview_size)
+			glMatrixMode(GL_PROJECTION)
+			glPushMatrix()
+			glLoadIdentity()
+			gluPerspective(45, 1.0, 0.1, 100)
+			
+			glMatrixMode(GL_MODELVIEW)
+			glPushMatrix()
+			glLoadIdentity()
+			glTranslatef(0, 0, -5)
+			glRotatef(15, 1, 0, 0)
+			glRotatef(30, 0, 1, 0)
+			glClear(GL_DEPTH_BUFFER_BIT)
+			glEnable(GL_LIGHTING)
+			glEnable(GL_DEPTH_TEST)
+			glClearColor(0.2, 0.2, 0.2, 1.0)
+			glShadeModel(GL_SMOOTH)
+			glEnable(GL_NORMALIZE)
+			glEnable(GL_LIGHTING)
+			modelo.draw()
+			glDisable(GL_DEPTH_TEST)
+			glDisable(GL_LIGHTING)
+			glPopMatrix()
+			glMatrixMode(GL_PROJECTION)
+			glPopMatrix()
+			glMatrixMode(GL_MODELVIEW)
+
+		glViewport(0, 0, width, height)
+		glClearColor(0.0, 0.0, 0.0, 1.0)
