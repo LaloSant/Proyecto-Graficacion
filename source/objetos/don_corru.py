@@ -2,14 +2,14 @@ from OpenGL.GL import *		# type: ignore
 from OpenGL.GLUT import *	# type: ignore
 from OpenGL.GLU import *	# type: ignore
 
-from objetos.objeto import Objeto	# type: ignore
+from source.objetos.objeto import Objeto	# type: ignore
 import utils.estado as est
-import objetos.pers_args as pers_args
+import source.objetos.pers_args as pers_args
 
-class Personaje (Objeto):
+class DonCorru (Objeto):
 	def __init__(self):
-		self.posicion = est.objetos["Personaje"][0]
-		self.radius = est.objetos["Personaje"][1]
+		self.posicion = est.objetos["don_corru"][0]
+		self.radius = est.objetos["don_corru"][1]
 
 	def draw(self):
 		glPushMatrix()
@@ -55,7 +55,7 @@ class Personaje (Objeto):
 
 		glPushMatrix()	#BOCA
 		self.set_material_properties(self.rgb(255, 255, 255))
-		rotacion = 10 if est.estado_personaje[0] == est.estados_personaje[0] else -10
+		rotacion = 10 if est.estado_don_corru[0] == est.estados_don_corru[0] else -10
 		glRotatef(rotacion, 1, 0, 0)
 		glScalef(0.2, 0.15, 0.8)
 		glTranslate(2.3, -1.2, 0)

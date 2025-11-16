@@ -7,19 +7,21 @@ from utils.input_handler import InputHandler
 import utils.estado as est
 import utils.update as updt
 from utils.audio import Audio
-from objetos.personaje import Personaje
-from objetos.esfera import Esfera
-from objetos.dodecaedro import Dodecaedro 
-from objetos.tetera import Tetera
-from objetos.torus import Torus
-from objetos.escena import Escena
+from source.objetos.don_corru import DonCorru
+from source.objetos.kevin import Kevin
+from source.objetos.esfera import Esfera
+from source.objetos.dodecaedro import Dodecaedro 
+from source.objetos.tetera import Tetera
+from source.objetos.torus import Torus
+from source.escenas.escena import Escena
 
 class MainWindow:
 	def __init__(self, width=800, height=600):
 		self.width = width
 		self.height = height
 		self.lighting_manager = LightingManager()
-		self.personaje = Personaje()
+		self.don_corru = DonCorru()
+		self.kevin = Kevin()
 		self.esfera = Esfera()
 		self.esfera2 = Esfera(name="Esfera2")
 		self.dodecaedro = Dodecaedro()
@@ -49,18 +51,19 @@ class MainWindow:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # type: ignore
 		glLoadIdentity()
 
-		pos_personaje = est.objetos["Personaje"][0]
+		pos_don_corru = est.objetos["don_corru"][0]
 
 		angle_y_rad = math.radians(est.camera_angle_y)
 		angle_x_rad = math.radians(est.camera_angle_x)
 
-		eye_x = pos_personaje[0] + est.camera_z * math.sin(angle_y_rad) * math.cos(angle_x_rad)
-		eye_y = pos_personaje[1] + est.camera_z * math.sin(angle_x_rad)
-		eye_z = pos_personaje[2] + est.camera_z * math.cos(angle_y_rad) * math.cos(angle_x_rad)
-		gluLookAt(eye_x, eye_y, eye_z, pos_personaje[0], pos_personaje[1], pos_personaje[2], 0, 1, 0)
+		eye_x = pos_don_corru[0] + est.camera_z * math.sin(angle_y_rad) * math.cos(angle_x_rad)
+		eye_y = pos_don_corru[1] + est.camera_z * math.sin(angle_x_rad)
+		eye_z = pos_don_corru[2] + est.camera_z * math.cos(angle_y_rad) * math.cos(angle_x_rad)
+		gluLookAt(eye_x, eye_y, eye_z, pos_don_corru[0], pos_don_corru[1], pos_don_corru[2], 0, 1, 0)
 		
 		self.lighting_manager.apply_lighting()
-		self.personaje.draw()
+		self.don_corru.draw()
+		self.kevin.draw()
 		self.esfera.draw()
 		self.esfera2.draw()
 		self.dodecaedro.draw()
@@ -106,8 +109,8 @@ class MainWindow:
 def main():
 	glutInit()
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)	# type: ignore
-	glutInitWindowSize(800, 600)
-	glutCreateWindow(b"G1_T4_3")
+	glutInitWindowSize(1000, 600)
+	glutCreateWindow(b"Torres Hanoi")
 
 	window = MainWindow()
 	window.init_gl()

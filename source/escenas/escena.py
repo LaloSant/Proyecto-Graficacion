@@ -1,7 +1,7 @@
 from OpenGL.GL import * # type: ignore
 import utils.estado as est
 import utils.texturas as text
-from objetos.objeto import Objeto
+from source.objetos.objeto import Objeto
 
 class Escena(Objeto):
 	def __init__(self) -> None:

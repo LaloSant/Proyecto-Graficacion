@@ -2,7 +2,7 @@ from OpenGL.GL import *		# type: ignore
 from OpenGL.GLUT import *	# type: ignore
 from OpenGL.GLU import *	# type: ignore
 
-from objetos.objeto import Objeto
+from source.objetos.objeto import Objeto
 import utils.estado as est
 
 class Tetera(Objeto):

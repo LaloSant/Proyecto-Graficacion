@@ -1,6 +1,6 @@
 from OpenGL.GLUT import * # type: ignore
 import utils.estado as est
-import objetos.pers_args as pers_args
+import source.objetos.pers_args as pers_args
 
 class InputHandler:
 	def __init__(self, lighting_manager):
@@ -38,9 +38,9 @@ class InputHandler:
 			self.lighting_manager.cycle_lighting_model()
 			self.keys_pressed.discard('l')
 		if key == 'c':
-			if est.estado_personaje[0] == est.estados_personaje[0]:
+			if est.estado_don_corru[0] == est.estados_don_corru[0]:
 				pers_args.cambiar_estado(1)		#Set caminando
-			elif est.estado_personaje[0] == est.estados_personaje[1]:
+			elif est.estado_don_corru[0] == est.estados_don_corru[1]:
 				pers_args.cambiar_estado(0)		#Set estatico
 			self.keys_pressed.discard('c')
 		
@@ -53,13 +53,13 @@ class InputHandler:
 
 	def process_continuous_input(self):
 		if 'a' in self.keys_pressed:
-			est.objetos["Personaje"][0][0] -= self.movement_speed
+			est.objetos["don_corru"][0][0] -= self.movement_speed
 		if 'd' in self.keys_pressed:
-			est.objetos["Personaje"][0][0] += self.movement_speed
+			est.objetos["don_corru"][0][0] += self.movement_speed
 		if 'w' in self.keys_pressed:
-			est.objetos["Personaje"][0][2] -= self.movement_speed
+			est.objetos["don_corru"][0][2] -= self.movement_speed
 		if 's' in self.keys_pressed:
-			est.objetos["Personaje"][0][2] += self.movement_speed
+			est.objetos["don_corru"][0][2] += self.movement_speed
 	
 	def mouse_click(self, button, state, x, y):
 		if button == 3:

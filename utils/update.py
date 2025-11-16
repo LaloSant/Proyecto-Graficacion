@@ -1,9 +1,9 @@
 import math
 from OpenGL.GLUT import *	#type:ignore
 
-from objetos.escena import Escena
+from source.escenas.escena import Escena
 import utils.estado as est
-import objetos.pers_args as pers_args
+import source.objetos.pers_args as pers_args
 
 _input_handler = None
 _escena:Escena
@@ -14,15 +14,15 @@ def set_input_handler(input_handler, escena):
 	_escena = escena
 
 def bounding_sphere():
-	personaje_data = est.objetos["Personaje"]
-	pos_personaje, radius_personaje = personaje_data
+	don_corru_data = est.objetos["don_corru"]
+	pos_don_corru, radius_don_corru = don_corru_data
 	collision_detected = False
 	for nombre_objeto, data_objeto in est.objetos.items():
-		if nombre_objeto == "Personaje":
+		if nombre_objeto == "don_corru":
 			continue
 		pos_objeto, radius_objeto = data_objeto
-		distancia_sq = (pos_personaje[0] - pos_objeto[0])**2 + (pos_personaje[2] - pos_objeto[2])**2
-		suma_radios_sq = (radius_personaje + radius_objeto)**2
+		distancia_sq = (pos_don_corru[0] - pos_objeto[0])**2 + (pos_don_corru[2] - pos_objeto[2])**2
+		suma_radios_sq = (radius_don_corru + radius_objeto)**2
 		if distancia_sq <= suma_radios_sq:
 			collision_detected = True
 			break
@@ -33,13 +33,12 @@ def bounding_sphere():
 		_escena.set_escenario(0)
 		pers_args.cambiar_estado(1)
 
-
 def animacion():
-	if est.estado_personaje[0] == est.estados_personaje[0]: #Estatico
+	if est.estado_don_corru[0] == est.estados_don_corru[0]: #Estatico
 		return
-	if est.estado_personaje[0] == est.estados_personaje[1]: #Caminando
+	if est.estado_don_corru[0] == est.estados_don_corru[1]: #Caminando
 		pers_args.caminando = 20 * math.sin(glutGet(GLUT_ELAPSED_TIME) / 200.0)
-	if est.estado_personaje[0] == est.estados_personaje[2]: #Brazos
+	if est.estado_don_corru[0] == est.estados_don_corru[2]: #Brazos
 		return
 
 def update(value):
