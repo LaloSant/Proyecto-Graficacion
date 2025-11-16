@@ -11,6 +11,10 @@ class InputHandler:
 		self.last_mouse_y = 0
 		self.keys_pressed = set()
 		self.movement_speed = 0.3
+		self.menu = None
+
+	def set_menu(self, menu):
+		self.menu = menu
 
 	def special_keys(self, key, x, y):
 		""" if key == GLUT_KEY_LEFT:
@@ -62,6 +66,19 @@ class InputHandler:
 			est.objetos["don_corru"][0][2] += self.movement_speed
 	
 	def mouse_click(self, button, state, x, y):
+		# Pasar el click al menú si está activo
+		if self.menu and self.menu.active:
+			# Convertir coordenadas de pantalla a coordenadas de OpenGL
+			width = 1000  # Asumir width, ajustar según sea necesario
+			height = 600  # Asumir height, ajustar según sea necesario
+			gl_x = (x - width/2)
+			gl_y = -(y - height/2)
+			
+			if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+				self.menu.handle_click(gl_x, gl_y)
+			glutPostRedisplay()
+			return
+
 		if button == 3:
 			self.estado.camera_z -= 0.5
 		elif button == 4:
@@ -87,6 +104,16 @@ class InputHandler:
 		glutPostRedisplay()
 
 	def passive_mouse_motion(self, x, y):
+		# Pasar el movimiento del mouse al menú si está activo
+		if self.menu and self.menu.active:
+			width = 1000
+			height = 600
+			gl_x = (x - width/2)
+			gl_y = -(y - height/2)
+			self.menu.update_mouse(gl_x, gl_y)
+			glutPostRedisplay()
+			return
+
 		area = self.estado.mouse_hover_area
 		if area[0] <= x <= area[2] and area[1] <= y <= area[3]:
 			print(f"Cursor sobre el área definida en ({x}, {y})")
