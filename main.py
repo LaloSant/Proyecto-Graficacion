@@ -37,21 +37,21 @@ class MainWindow:
 			on_niveles=self._on_niveles,
 			on_salir=self._on_salir
 		)
-		self.game_state = "menu"  # menu, jugar, personaje, niveles
+		self.game_state = est.estados_juego[0]  # ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 		self.selected_personaje = None
 
 	def _on_jugar(self):
-		self.game_state = "jugar"
+		self.game_state = est.estados_juego[1]
 
 	def _on_personaje(self, personaje):
 		self.selected_personaje = personaje
-		self.game_state = "personaje_seleccionado"
+		self.game_state = est.estados_juego[0]
 
 	def _on_niveles(self):
-		self.game_state = "niveles"
+		self.game_state = est.estados_juego[0]
 
 	def _on_salir(self):
-		exit(0)
+		glutLeaveMainLoop()
 
 	def init_gl(self):
 		glEnable(GL_DEPTH_TEST)
@@ -90,9 +90,8 @@ class MainWindow:
 		self.torus.draw() """
 		self.escena.draw_room()
 		self.draw_hud()
-		
-		# Dibujar menú si está activo
-		if self.game_state == "menu":
+
+		if self.game_state == est.estados_juego[0]:
 			self.menu.draw(self.width, self.height)
 		
 		glutSwapBuffers()
@@ -105,9 +104,7 @@ class MainWindow:
 		glMatrixMode(GL_MODELVIEW)
 		glPushMatrix()
 		glLoadIdentity()
-
-
-		if self.game_state != "menu":
+		if self.game_state != est.estados_juego[0]:
 			glDisable(GL_LIGHTING)
 			glDisable(GL_DEPTH_TEST)
 

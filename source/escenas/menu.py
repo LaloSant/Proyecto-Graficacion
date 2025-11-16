@@ -1,11 +1,11 @@
 from OpenGL.GL import *  # type: ignore
 from OpenGL.GLUT import *  # type: ignore
 from OpenGL.GLU import *  # type: ignore
-import math
 from source.objetos.objeto import Objeto
 from source.objetos.kevin import Kevin
 from source.objetos.don_corru import DonCorru
 from source.objetos.dodecaedro import Dodecaedro
+import utils.estado as est
 
 
 class Button:
@@ -35,7 +35,6 @@ class Button:
 		glVertex2f(self.x - self.width/2, self.y + self.height/2)
 		glEnd()
 		
-		# Dibujar borde
 		glColor3f(1.0, 1.0, 1.0)
 		glBegin(GL_LINE_LOOP)
 		glVertex2f(self.x - self.width/2, self.y - self.height/2)
@@ -44,7 +43,6 @@ class Button:
 		glVertex2f(self.x - self.width/2, self.y + self.height/2)
 		glEnd()
 		
-		# Dibujar texto (usando GLUT)
 		glColor3f(*self.color_text)
 		glRasterPos2f(self.x - len(self.label) * 5, self.y - 5)
 		for char in self.label:
@@ -54,40 +52,41 @@ class Button:
 		if self.callback:
 			self.callback()
 
-
 class Menu:
-	"""Pantalla de menú principal"""
 	def __init__(self, on_jugar=None, on_personaje=None, on_niveles=None, on_salir=None):
 		self.active = True
-		self.state = "main"  # main, personaje
+		self.state = est.estados_juego[0]  #["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 		self.selected_personaje = None
 		
-		# Callbacks
 		self.on_jugar = on_jugar
 		self.on_personaje = on_personaje
 		self.on_niveles = on_niveles
 		self.on_salir = on_salir
 		
-		# Botones del menú principal
 		self.buttons_main = [
 			Button(-200, 50, 120, 40, "Jugar", self._on_jugar),
 			Button(0, 50, 250, 40, "Seleccionar Personaje", self._on_personaje),
 			Button(200, 50, 100, 40, "Niveles", self._on_niveles),
-			Button(-80, -50, 100, 40, "Salir", self._on_salir),
+			Button(-80, -50, 100, 40, "Salir", self._on_salir)
 		]
 		
-		# Botones de selección de personaje
 		self.buttons_personaje = [
-			Button(-100, 20, 100, 40, "Kevin", lambda: self._select_personaje("kevin")),
-			Button(0, 20, 120, 40, "Don Corru", lambda: self._select_personaje("don_corru")),
-			Button(100, 20, 100, 40, "Cubo", lambda: self._select_personaje("cubo")),
-			Button(-80, -50, 100, 40, "Volver", self._back_to_main),
+			Button(-200, 20, 100, 40, "Kevin", lambda: self._select_personaje(est.personajes[0])),
+			Button(0, 20, 120, 40, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
+			Button(200, 20, 100, 40, "Kenny", lambda: self._select_personaje(est.personajes[2])),
+			Button(-80, -50, 100, 40, "Volver", self._back_to_main)
+		]
+
+		self.buttons_niveles = [
+			Button(-200, 20, 100, 40, "Nivel 1", lambda: self._select_nivel(est.niveles[0])),
+			Button(0, 20, 120, 40, "Nivel 2", lambda: self._select_nivel(est.niveles[1])),
+			Button(200, 20, 100, 40, "Nivel 3", lambda: self._select_nivel(est.niveles[2])),
+			Button(-80, -50, 100, 40, "Volver", self._back_to_main)
 		]
 		
-		# Objetos 3D para mostrar
 		self.kevin = Kevin()
 		self.don_corru = DonCorru()
-		self.cubo = Dodecaedro()  # Placeholder: usando dodecaedro como cubo
+		self.kenny = Dodecaedro()  # Placeholder: usando dodecaedro como cubo
 
 	def _on_jugar(self):
 		if self.on_jugar:
@@ -95,12 +94,10 @@ class Menu:
 		self.active = False
 
 	def _on_personaje(self):
-		self.state = "personaje"
+		self.state = est.estados_juego[1]
 
 	def _on_niveles(self):
-		if self.on_niveles:
-			self.on_niveles()
-		self.active = False
+		self.state = est.estados_juego[2]
 
 	def _on_salir(self):
 		if self.on_salir:
@@ -112,20 +109,30 @@ class Menu:
 		if self.on_personaje:
 			self.on_personaje(personaje)
 		self.active = False
+	
+	def _select_nivel(self, nivel):
+		self.selected_nivel = nivel
+		if self.on_niveles:
+			self.on_niveles(nivel)
+		self.active = False
 
 	def _back_to_main(self):
-		self.state = "main"
+		self.state = est.estados_juego[0]
 
 	def update_mouse(self, x, y):
-		"""Actualiza el estado hover de los botones según la posición del mouse"""
-		buttons = self.buttons_main if self.state == "main" else self.buttons_personaje
-		
+		buttons = []
+		if self.state == est.estados_juego[0]:
+			buttons = self.buttons_main
+		elif self.state == est.estados_juego[1]:
+			buttons = self.buttons_personaje
+		elif self.state == est.estados_juego[2]:
+			buttons = self.buttons_niveles
 		for button in buttons:
 			button.hovered = button.contains_point(x, y)
 
 	def handle_click(self, x, y):
 		"""Maneja el click del mouse"""
-		buttons = self.buttons_main if self.state == "main" else self.buttons_personaje
+		buttons = self.buttons_main if self.state == est.estados_juego[0] else self.buttons_personaje
 		
 		for button in buttons:
 			if button.contains_point(x, y):
@@ -133,11 +140,9 @@ class Menu:
 				break
 
 	def draw(self, width, height):
-		"""Dibuja el menú"""
 		if not self.active:
 			return
 
-		# Configurar matriz de proyección 2D
 		glMatrixMode(GL_PROJECTION)
 		glPushMatrix()
 		glLoadIdentity()
@@ -147,12 +152,10 @@ class Menu:
 		glPushMatrix()
 		glLoadIdentity()
 
-		# Desactivar iluminación y texturas para la UI
 		glDisable(GL_LIGHTING)
 		glDisable(GL_TEXTURE_2D)
 		glDisable(GL_DEPTH_TEST)
 
-		# Dibujar fondo oscuro semi-transparente
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		glColor4f(0, 0, 0, 0.7)
@@ -164,38 +167,40 @@ class Menu:
 		glEnd()
 		glDisable(GL_BLEND)
 
-		# Dibujar título
 		glColor3f(1.0, 1.0, 1.0)
-		title = "MENU PRINCIPAL" if self.state == "main" else "SELECCIONAR PERSONAJE"
+		# title = "MENU PRINCIPAL" if self.state == est.estados_juego[0] else "SELECCIONAR PERSONAJE"
+		title = ""
+		if self.state == est.estados_juego[0]:
+			title = "MENU PRINCIPAL"
+		elif self.state == est.estados_juego[1]:
+			title = "SELECCIONAR PERSONAJE"
+		elif self.state == est.estados_juego[2]:
+			title = "SELECCIONAR NIVEL"
+
 		glRasterPos2f(-len(title) * 5, height/2 - 50)
 		for char in title:
 			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
 
-		# Dibujar botones
-		if self.state == "main":
+		if self.state == est.estados_juego[0]:
 			for button in self.buttons_main:
 				button.draw_2d()
-		elif self.state == "personaje":
+		elif self.state == est.estados_juego[1]:
 			for button in self.buttons_personaje:
 				button.draw_2d()
-			
-			# Dibujar etiquetas de personajes
 			self._draw_personaje_labels(width, height)
-
+		elif self.state == est.estados_juego[2]:
+			for button in self.buttons_niveles:
+				button.draw_2d()
+		
 		glEnable(GL_DEPTH_TEST)
-
-		# Restaurar matriz de proyección
 		glPopMatrix()
 		glMatrixMode(GL_PROJECTION)
 		glPopMatrix()
 		glMatrixMode(GL_MODELVIEW)
-
-		# Reactivar iluminación
 		glEnable(GL_LIGHTING)
 
 	def _draw_personaje_labels(self, width, height):
-		"""Dibuja las etiquetas de los personajes"""
-		personajes = ["Kevin", "Don Corru", "Cubo"]
+		personajes = ["Kevin", "Don Corru", "Kenny"]
 		positions = [
 			(-200, 80),
 			(0, 80),
@@ -207,4 +212,3 @@ class Menu:
 			glRasterPos2f(pos[0] - len(personaje) * 3, pos[1])
 			for char in personaje:
 				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ord(char)) # pyright: ignore[reportUndefinedVariable]
-			# glPushMatrix()

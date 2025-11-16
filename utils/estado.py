@@ -27,9 +27,17 @@ objetos = {
 
 audio:Audio
 
-colision = [False, None]
+# colision = [False, None]
 
 mouse_hover_area = [0, 0, 200, 200] # x_min, y_min, x_max, y_max
+
+estados_juego = ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
+
+personajes = ["Kevin", "Don_corru", "Kenny"]
+personaje_sel = 0
+
+niveles = ["Nivel_1", "Nivel_2", "Nivel_3"]
+nivel_sel = 0
 
 estados_don_corru = ["Estatico", "Caminando", "Brazos"]
 estado_don_corru = [estados_don_corru[0], 0]	#estado, porcentaje
