@@ -99,22 +99,17 @@ class Menu:
 		self.state = est.estados_juego[2]
 
 	def _on_salir(self):
-		if self.on_salir:
-			self.on_salir()
-		self.active = False
+		glutLeaveMainLoop()
 
 	def _select_personaje(self, est_personaje):
 		self.selected_personaje = est_personaje
-		if self.on_personaje:
-			self.on_personaje(est_personaje)
-			self.state = est.estados_juego[0]
-			est.personaje_sel = est_personaje
+		self.state = est.estados_juego[0]
+		est.personaje_sel = est_personaje
 	
 	def _select_nivel(self, nivel):
 		self.selected_nivel = nivel
-		if self.on_niveles:
-			self.on_niveles(nivel)
-			self.state = est.estados_juego[0]
+		self.state = est.estados_juego[0]
+		est.nivel_sel = nivel
 
 	def _back_to_main(self):
 		self.state = est.estados_juego[0]
@@ -131,17 +126,13 @@ class Menu:
 			button.hovered = button.contains_point(x, y)
 
 	def handle_click(self, x, y):
-		buttons = self.buttons_main if self.state == est.estados_juego[0] else self.buttons_personaje
-		for button in buttons:
-			if button.contains_point(x, y):
-				button.click()
-				break
-		
-		if self.state == est.estados_juego[1]:
+		buttons = []
+		if self.state == est.estados_juego[0]:
+			buttons = self.buttons_main
+		elif self.state == est.estados_juego[1]:
 			buttons = self.buttons_personaje
-		else:
+		elif self.state == est.estados_juego[2]:
 			buttons = self.buttons_niveles
-		
 		for button in buttons:
 			if button.contains_point(x, y):
 				button.click()

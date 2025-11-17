@@ -8,12 +8,12 @@ import source.objetos.pers_args as pers_args
 
 class DonCorru (Objeto):
 	def __init__(self):
-		self.posicion = est.objetos["don_corru"][0]
-		self.radius = est.objetos["don_corru"][1]
+		pass
+		# self.posicion = est.objetos["don_corru"][0]
 
 	def draw(self):
 		glPushMatrix()
-		glTranslate(self.posicion[0], self.posicion[1], self.posicion[2])
+		# glTranslate(self.posicion[0], self.posicion[1], self.posicion[2])
 		glRotatef(-90, 0, 1, 0)
 		self.dibuja_torso()
 		self.dibuja_cabeza()

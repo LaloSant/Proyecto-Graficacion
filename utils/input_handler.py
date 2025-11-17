@@ -15,9 +15,6 @@ class InputHandler:
 		self.keys_pressed = set()
 		self.movement_speed = 0.3
 
-	def set_menu(self, menu):
-		self.menu = menu
-
 	def special_keys(self, key, x, y):
 		""" if key == GLUT_KEY_LEFT:
 			self.estado.camera_x -= 0.2
@@ -27,10 +24,6 @@ class InputHandler:
 			self.estado.camera_y += 0.2
 		if key == GLUT_KEY_DOWN:
 			self.estado.camera_y -= 0.2 """
-		glutPostRedisplay()
-	
-	def special_keys_up(self, key, x, y):
-		"""Callback para cuando se suelta una tecla especial"""
 		glutPostRedisplay()
 
 	def keyboard(self, key, x, y):
@@ -52,30 +45,25 @@ class InputHandler:
 			elif est.estado_don_corru[0] == est.estados_don_corru[1]:
 				pers_args.cambiar_estado(0)		#Set estatico
 			self.keys_pressed.discard('c')
-		
+		if key == 'a' and not self.menu.active:
+			if est.posicion_pers_sel <= -1:
+				return
+			est.posicion_pers_sel -= 1
+		elif key == 'd' and not self.menu.active:
+			if est.posicion_pers_sel >= 1:
+				return
+			est.posicion_pers_sel += 1
 		glutPostRedisplay()
 	
 	def keyboard_up(self, key, x, y):
 		key = key.decode('utf-8').lower()
 		self.keys_pressed.discard(key)
 		glutPostRedisplay()
-
-	def process_continuous_input(self):
-		if 'a' in self.keys_pressed:
-			est.objetos["don_corru"][0][0] -= self.movement_speed
-		if 'd' in self.keys_pressed:
-			est.objetos["don_corru"][0][0] += self.movement_speed
-		if 'w' in self.keys_pressed:
-			est.objetos["don_corru"][0][2] -= self.movement_speed
-		if 's' in self.keys_pressed:
-			est.objetos["don_corru"][0][2] += self.movement_speed
 	
 	def mouse_click(self, button, state, x, y):
-		# Pasar el click al menú si está activo
 		if self.menu and self.menu.active:
-			# Convertir coordenadas de pantalla a coordenadas de OpenGL
-			width = 1000  # Asumir width, ajustar según sea necesario
-			height = 600  # Asumir height, ajustar según sea necesario
+			width = 1000
+			height = 600
 			gl_x = (x - width/2)
 			gl_y = -(y - height/2)
 			
@@ -107,18 +95,3 @@ class InputHandler:
 			self.last_mouse_x = x
 			self.last_mouse_y = y
 		glutPostRedisplay()
-
-	def passive_mouse_motion(self, x, y):
-		# Pasar el movimiento del mouse al menú si está activo
-		if self.menu and self.menu.active:
-			width = 1000
-			height = 600
-			gl_x = (x - width/2)
-			gl_y = -(y - height/2)
-			self.menu.update_mouse(gl_x, gl_y)
-			glutPostRedisplay()
-			return
-
-		area = self.estado.mouse_hover_area
-		if area[0] <= x <= area[2] and area[1] <= y <= area[3]:
-			print(f"Cursor sobre el área definida en ({x}, {y})")

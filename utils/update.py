@@ -42,9 +42,6 @@ def animacion():
 		return
 
 def update(value):
-	# bounding_sphere()
 	animacion()
-	# if _input_handler:
-	# 	_input_handler.process_continuous_input()
 	glutPostRedisplay()
 	glutTimerFunc(16, update, 0)

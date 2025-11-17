@@ -12,6 +12,10 @@ class Escena(Objeto):
 		self.texturas.append(text.load_texture("resources/imgs/piso2.jpg"))
 		self.texturas.append(text.load_texture("resources/imgs/pared2.jpg"))
 		self.texturas.append(text.load_texture("resources/imgs/techo2.jpg"))
+		self.texturas.append(text.load_texture("resources/imgs/piso3.jpg"))
+		self.texturas.append(text.load_texture("resources/imgs/pared3.jpg"))
+		self.texturas.append(text.load_texture("resources/imgs/techo3.jpg"))
+
 
 		est.texturas_escena["Piso"] = self.texturas[0]
 		est.texturas_escena["Pared"] = self.texturas[1]

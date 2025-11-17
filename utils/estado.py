@@ -2,8 +2,8 @@ from utils.audio import Audio
 
 camera_x = 0.0
 camera_y = 0.0
-camera_z = 5
-camera_angle_x = 0.0
+camera_z = 15
+camera_angle_x = 15
 camera_angle_y = 0.0
 
 scene_bounds = {
@@ -17,19 +17,17 @@ texturas_escena = {"Piso": None
 				, "Techo":None }
 
 objetos = {
-	"don_corru": [[0, 0, 0], 1],
-	"Esfera": [[4, 0, -4], 1],
-	"Dodecaedro": [[0, 0, -4], 1],
-	"Esfera2": [[-4, 0, 0], 1],
-	"Tetera": [[-4, 0, -4], 1],
-	"Torus": [[4, 0, 0], 1]
+	"personaje": [[0, 0, 0], 1],
 }
 
+posiciones_pers = {
+	-1: [-5, 0, -2],
+	0: [0, 0, -2],
+	1: [5, 0, -2]
+}
+posicion_pers_sel = 0
+
 audio:Audio
-
-# colision = [False, None]
-
-mouse_hover_area = [0, 0, 200, 200] # x_min, y_min, x_max, y_max
 
 estados_juego = ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 
