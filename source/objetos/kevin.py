@@ -108,7 +108,7 @@ class Kevin(Objeto):
 
 	def draw(self):
 		glPushMatrix()
-		glTranslatef(0, 0, 0)
+		glScalef(0.8, 0.8, 0.8)
 		arm_angle = 0.0 
 		leg_angle = 0.0
 		eye_growth = 0.0

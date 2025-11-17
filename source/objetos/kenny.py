@@ -196,7 +196,7 @@ class Kenny(Objeto):
 		elif state.reaction_type == "shake":
 			x_offset = math.sin(state.reaction_timer * 0.5 * math.pi) * 0.2
 			glTranslatef(x_offset, 0, 0) """
-		glTranslatef(-1, 0, 0)
+		glTranslatef(-0.5, 0, 0)
 		self.draw_body()
 		self.draw_hat()
 		self.draw_head()
