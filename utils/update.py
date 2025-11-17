@@ -34,12 +34,34 @@ def bounding_sphere():
 		pers_args.cambiar_estado(1)
 
 def animacion():
-	if est.estado_don_corru[0] == est.estados_don_corru[0]: #Estatico
-		return
-	if est.estado_don_corru[0] == est.estados_don_corru[1]: #Caminando
-		pers_args.caminando = 20 * math.sin(glutGet(GLUT_ELAPSED_TIME) / 200.0)
-	if est.estado_don_corru[0] == est.estados_don_corru[2]: #Brazos
-		return
+	if est.estado_pers[0] == est.estados_pers[1]: #Caminando
+		paso_pct = 0.05
+		paso_pos = 5
+		signo = _sign(est.caminando_pct)
+		if abs(est.caminando_pct) <= 0.09:
+			if est.posicion_pers_sel == 0 :
+				est.posiciones_pers[est.posicion_pers_sel][0] = 0
+				est.posiciones_pers[-1][0] = 0
+				est.posiciones_pers[1][0] = 0
+			else:
+				est.posiciones_pers[est.posicion_pers_sel][0] = paso_pos * signo
+				est.posiciones_pers[0][0] = paso_pos * signo
+			est.estado_pers[0] = est.estados_pers[0]
+			est.caminando_pct = 0
+			pers_args.cambiar_estado(0)
+			return
+		est.posiciones_pers[est.posicion_pers_sel][0] += paso_pct * signo * paso_pos
+		est.caminando_pct -= paso_pct * signo
+		if est.personaje_sel == "Aqui le pudieran mover" or True:
+			pers_args.caminando = 20 * math.sin(glutGet(GLUT_ELAPSED_TIME) / 200.0)
+
+def _sign(x):
+	if x < 0:
+		return -1
+	elif x == 0:
+		return 0
+	else:
+		return 1
 
 def update(value):
 	animacion()

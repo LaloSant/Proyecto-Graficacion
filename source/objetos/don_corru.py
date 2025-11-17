@@ -55,7 +55,7 @@ class DonCorru (Objeto):
 
 		glPushMatrix()	#BOCA
 		self.set_material_properties(self.rgb(255, 255, 255))
-		rotacion = 10 if est.estado_don_corru[0] == est.estados_don_corru[0] else -10
+		rotacion = 10 if est.estado_pers[0] == est.estados_pers[0] else -10
 		glRotatef(rotacion, 1, 0, 0)
 		glScalef(0.2, 0.15, 0.8)
 		glTranslate(2.3, -1.2, 0)

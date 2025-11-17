@@ -40,19 +40,24 @@ class InputHandler:
 			self.lighting_manager.cycle_lighting_model()
 			self.keys_pressed.discard('l')
 		if key == 'c':
-			if est.estado_don_corru[0] == est.estados_don_corru[0]:
+			if est.estado_pers[0] == est.estados_pers[0]:
 				pers_args.cambiar_estado(1)		#Set caminando
-			elif est.estado_don_corru[0] == est.estados_don_corru[1]:
+			elif est.estado_pers[0] == est.estados_pers[1]:
 				pers_args.cambiar_estado(0)		#Set estatico
 			self.keys_pressed.discard('c')
-		if key == 'a' and not self.menu.active:
-			if est.posicion_pers_sel <= -1:
-				return
-			est.posicion_pers_sel -= 1
-		elif key == 'd' and not self.menu.active:
-			if est.posicion_pers_sel >= 1:
-				return
-			est.posicion_pers_sel += 1
+		if not self.menu.active and est.caminando_pct == 0:
+			if key == 'a':
+				if est.posicion_pers_sel <= -1 or est.caminando_pct != 0:
+					return
+				est.estado_pers[0] = est.estados_pers[1]
+				est.posicion_pers_sel -= 1
+				est.caminando_pct = -1
+			elif key == 'd':
+				if est.posicion_pers_sel >= 1 or est.caminando_pct != 0:
+					return
+				est.estado_pers[0] = est.estados_pers[1]
+				est.posicion_pers_sel += 1
+				est.caminando_pct = +1
 		glutPostRedisplay()
 	
 	def keyboard_up(self, key, x, y):

@@ -7,4 +7,4 @@ def cambiar_estado(num):
 	global caminando
 	if num == 0:
 		caminando = 0
-	est.estado_don_corru[0] = est.estados_don_corru[num]
+	est.estado_pers[0] = est.estados_pers[num]

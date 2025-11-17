@@ -20,10 +20,15 @@ objetos = {
 	"personaje": [[0, 0, 0], 1],
 }
 
-posiciones_pers = {
+""" posiciones_pers = {
 	-1: [-5, 0, -2],
 	0: [0, 0, -2],
 	1: [5, 0, -2]
+} """
+posiciones_pers = {
+	-1: [0.0, 0, -2],
+	0: [0.0, 0, -2],
+	1: [0.0, 0, -2]
 }
 posicion_pers_sel = 0
 
@@ -37,5 +42,7 @@ personaje_sel = personajes[0]
 niveles = {0:"Nivel_1", 1:"Nivel_2", 2:"Nivel_3"}
 nivel_sel = 0
 
-estados_don_corru = ["Estatico", "Caminando", "Brazos"]
-estado_don_corru = [estados_don_corru[0], 0]	#estado, porcentaje
+estados_pers = ["Estatico", "Caminando", "Brazos"]
+caminando_pct = 0
+estado_pers = [estados_pers[0], 0]	#estado, porcentaje
+
