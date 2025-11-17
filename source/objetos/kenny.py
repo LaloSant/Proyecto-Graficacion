@@ -39,7 +39,7 @@ class Kenny(Objeto):
 		eye_y_offset = 0.0 
 		eye_z_pos = 0.5 + 0.025
 
-		active = True
+		active = False
 		scale_factor = 3.0 if active else 1.0
 		sx = 0.05 * scale_factor
 		sy = 0.25 * scale_factor
@@ -72,7 +72,7 @@ class Kenny(Objeto):
 		glPopMatrix()
 
 	def draw_arms(self):
-		active = True
+		active = False
 		raise_offset = 0.55 if active else 0.0
 		rotate_angle = -80 if active else 0
 		rotate_angle_left = 80 if active else 0 
@@ -137,7 +137,7 @@ class Kenny(Objeto):
 		glPopMatrix()
 
 	def draw_legs(self):
-		active = True
+		active = False
 		spread = 0.15 if active else 0.0
 		rotate_spread = 15 if active else 0
 
