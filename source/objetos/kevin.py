@@ -1,9 +1,9 @@
-from OpenGL.GL import * 	# type: ignore
-from OpenGL.GLU import *	# type: ignore
+from OpenGL.GL import *		# type: ignore
 from OpenGL.GLUT import *	# type: ignore
-import math
-
-from .objeto import Objeto
+from OpenGL.GLU import *	# type: ignore
+from source.objetos.objeto import Objeto	# type: ignore
+import utils.estado as est
+import source.objetos.pers_args as pers_args
 
 class Kevin(Objeto):
 	def draw_head(self):
@@ -48,7 +48,7 @@ class Kevin(Objeto):
 		# glColor3f(0.2, 0.2, 0.2) 
 		self.set_material_properties(self.rgb(51, 51, 51))
 		glScalef(0.6, 0.25, 0.1)
-		glutSolidCube(1)
+		glutSolidCube(1.0)
 		glPopMatrix()
 
 	def draw_body(self):
@@ -60,13 +60,12 @@ class Kevin(Objeto):
 		glutSolidCube(1.0)
 		glPopMatrix()
 
-	def draw_arms(self, raise_angle=0.0):
+	def draw_arms(self):
 		# Brazo izquierdo
 		glPushMatrix()
-		# glColor3f(198/255, 136/255, 99/255)
 		self.set_material_properties(self.rgb(198, 136, 99))
 		glTranslatef(-1.0, 0.9, 0)
-		glRotatef(raise_angle, 1, 0, 0)
+		glRotatef(-pers_args.caminando, 1, 0, 0)
 		glTranslatef(0, -0.6, 0)
 		glScalef(.4, 1.2, .3)
 		glutSolidCube(1.0)
@@ -74,34 +73,29 @@ class Kevin(Objeto):
 
 		# Brazo derecho
 		glPushMatrix()
-		# glColor3f(198/255, 136/255, 99/255)
 		self.set_material_properties(self.rgb(198, 136, 99))
 		glTranslatef(1.0, 0.9, 0)
-		glRotatef(-raise_angle, 1, 0, 0)
+		glRotatef(pers_args.caminando, 1, 0, 0)
 		glTranslatef(0, -0.6, 0)
 		glScalef(.4, 1.2, .3)
 		glutSolidCube(1.0)
 		glPopMatrix()
 
-	def draw_legs(self, raise_angle=0.0):
+	def draw_legs(self):
 		#pierna izquieda
 		glPushMatrix()
-		# glColor3f(0.5, 0.5, 0.5) 
 		self.set_material_properties(self.rgb(127, 127, 127))
+		glRotatef(pers_args.caminando, 1, 0, 0)
 		glTranslatef(-.5, -1.4, 0)
-		glRotatef(raise_angle, 1, 0, 0)
-		glTranslatef(0, -0.25, 0)
 		glScalef(.5, 1.5, .5)
 		glutSolidCube(1.0)
 		glPopMatrix()
 
 		#pierna derecha
 		glPushMatrix()
-		# glColor3f(0.5, 0.5, 0.5) 
 		self.set_material_properties(self.rgb(127, 127, 127))
+		glRotatef(-pers_args.caminando, 1, 0, 0)
 		glTranslatef(.5, -1.4, 0)
-		glRotatef(-raise_angle, 1, 0, 0)
-		glTranslatef(0, -0.25, 0)
 		glScalef(.5, 1.5, .5)
 		glutSolidCube(1.0)
 		glPopMatrix()
@@ -109,8 +103,7 @@ class Kevin(Objeto):
 	def draw(self):
 		glPushMatrix()
 		glScalef(0.8, 0.8, 0.8)
-		arm_angle = 0.0 
-		leg_angle = 0.0
+		# arm_angle = 0.0 
 		eye_growth = 0.0
 		mouth_growth = 0.0
 		self.draw_body()
@@ -118,8 +111,8 @@ class Kevin(Objeto):
 		self.draw_horns()
 		self.draw_eyes(eye_growth)
 		self.draw_mouth(mouth_growth)
-		self.draw_arms(arm_angle)
-		self.draw_legs(leg_angle)
+		self.draw_arms()
+		self.draw_legs()
 		glPopMatrix()
 
 		""" if state.collision_state and state.animation_state:
