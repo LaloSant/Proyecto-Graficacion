@@ -56,7 +56,6 @@ class Menu:
 	def __init__(self, on_jugar=None, on_personaje=None, on_niveles=None, on_salir=None):
 		self.active = True
 		self.state = est.estados_juego[0]  #["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
-		self.selected_personaje = None
 		
 		self.on_jugar = on_jugar
 		self.on_personaje = on_personaje
@@ -78,15 +77,15 @@ class Menu:
 		]
 
 		self.buttons_niveles = [
-			Button(-200, 20, 100, 40, "Nivel 1", lambda: self._select_nivel(est.niveles[0])),
-			Button(0, 20, 120, 40, "Nivel 2", lambda: self._select_nivel(est.niveles[1])),
-			Button(200, 20, 100, 40, "Nivel 3", lambda: self._select_nivel(est.niveles[2])),
+			Button(-200, 20, 100, 40, "Tutorial", lambda: self._select_nivel(0)),
+			Button(0, 20, 120, 40, "3 Niveles", lambda: self._select_nivel(1)),
+			Button(200, 20, 100, 40, "4 Niveles", lambda: self._select_nivel(2)),
 			Button(-80, -50, 100, 40, "Volver", self._back_to_main)
 		]
 		
 		self.kevin = Kevin()
 		self.don_corru = DonCorru()
-		self.kenny = Kenny()  # Placeholder: usando dodecaedro como cubo
+		self.kenny = Kenny()
 
 	def _on_jugar(self):
 		if self.on_jugar:
@@ -104,17 +103,18 @@ class Menu:
 			self.on_salir()
 		self.active = False
 
-	def _select_personaje(self, personaje):
-		self.selected_personaje = personaje
+	def _select_personaje(self, est_personaje):
+		self.selected_personaje = est_personaje
 		if self.on_personaje:
-			self.on_personaje(personaje)
-		self.active = False
+			self.on_personaje(est_personaje)
+			self.state = est.estados_juego[0]
+			est.personaje_sel = est_personaje
 	
 	def _select_nivel(self, nivel):
 		self.selected_nivel = nivel
 		if self.on_niveles:
 			self.on_niveles(nivel)
-		self.active = False
+			self.state = est.estados_juego[0]
 
 	def _back_to_main(self):
 		self.state = est.estados_juego[0]
@@ -131,7 +131,6 @@ class Menu:
 			button.hovered = button.contains_point(x, y)
 
 	def handle_click(self, x, y):
-		"""Maneja el click del mouse"""
 		buttons = self.buttons_main if self.state == est.estados_juego[0] else self.buttons_personaje
 		for button in buttons:
 			if button.contains_point(x, y):
@@ -140,7 +139,7 @@ class Menu:
 		
 		if self.state == est.estados_juego[1]:
 			buttons = self.buttons_personaje
-		elif self.state == est.estados_juego[2]:
+		else:
 			buttons = self.buttons_niveles
 		
 		for button in buttons:

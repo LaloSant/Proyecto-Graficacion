@@ -9,10 +9,7 @@ import utils.update as updt
 from utils.audio import Audio
 from source.objetos.don_corru import DonCorru
 from source.objetos.kevin import Kevin
-from source.objetos.esfera import Esfera
-from source.objetos.dodecaedro import Dodecaedro 
-from source.objetos.tetera import Tetera
-from source.objetos.torus import Torus
+from source.objetos.kenny import Kenny
 from source.escenas.escena import Escena
 from source.escenas.menu import Menu
 
@@ -23,13 +20,8 @@ class MainWindow:
 		self.lighting_manager = LightingManager()
 		self.don_corru = DonCorru()
 		self.kevin = Kevin()
-		self.esfera = Esfera()
-		self.esfera2 = Esfera(name="Esfera2")
-		self.dodecaedro = Dodecaedro()
-		self.tetera = Tetera()
-		self.torus = Torus()
+		self.kenny = Kenny()
 		self.escena = Escena()
-		self.input_handler = InputHandler(self.lighting_manager)
 		self.audio = Audio()
 		self.menu = Menu(
 			on_jugar=self._on_jugar,
@@ -37,18 +29,20 @@ class MainWindow:
 			on_niveles=self._on_niveles,
 			on_salir=self._on_salir
 		)
+		
 		self.game_state = est.estados_juego[0]  # ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
-		self.selected_personaje = None
+		self.input_handler = InputHandler(self.lighting_manager, self.menu, self.game_state)
 
 	def _on_jugar(self):
 		self.game_state = est.estados_juego[1]
 
 	def _on_personaje(self, personaje):
-		self.selected_personaje = personaje
 		self.game_state = est.estados_juego[0]
 
-	def _on_niveles(self):
+	def _on_niveles(self, nivel):
 		self.game_state = est.estados_juego[0]
+		est.nivel_sel = nivel
+		print(est.nivel_sel)
 
 	def _on_salir(self):
 		glutLeaveMainLoop()
@@ -72,27 +66,29 @@ class MainWindow:
 	def display(self):
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # type: ignore
 		glLoadIdentity()
-		pos_don_corru = est.objetos["don_corru"][0]
 		angle_y_rad = math.radians(est.camera_angle_y)
 		angle_x_rad = math.radians(est.camera_angle_x)
-		eye_x = pos_don_corru[0] + est.camera_z * math.sin(angle_y_rad) * math.cos(angle_x_rad)
-		eye_y = pos_don_corru[1] + est.camera_z * math.sin(angle_x_rad)
-		eye_z = pos_don_corru[2] + est.camera_z * math.cos(angle_y_rad) * math.cos(angle_x_rad)
-		gluLookAt(eye_x, eye_y, eye_z, pos_don_corru[0], pos_don_corru[1], pos_don_corru[2], 0, 1, 0)
-		
-		""" self.lighting_manager.apply_lighting()
-		self.don_corru.draw()
-		self.kevin.draw()
-		self.esfera.draw()
-		self.esfera2.draw()
-		self.dodecaedro.draw()
-		self.tetera.draw()
-		self.torus.draw() """
-		self.escena.draw_room()
+		eye_x = est.camera_z * math.sin(angle_y_rad) * math.cos(angle_x_rad)
+		eye_y = est.camera_z * math.sin(angle_x_rad)
+		eye_z = est.camera_z * math.cos(angle_y_rad) * math.cos(angle_x_rad)
+		gluLookAt(eye_x, eye_y, eye_z, 0, 0, 0, 0, 1, 0)
+		self.escena.draw_room(est.niveles[est.nivel_sel])
 		self.draw_hud()
 
-		if self.game_state == est.estados_juego[0]:
+		
+		if self.menu.active:
+			self.game_state = est.estados_juego[0]
 			self.menu.draw(self.width, self.height)
+		else:
+			# print(est.nivel_sel)
+			# print(est.personaje_sel)
+			self.lighting_manager.apply_lighting()
+			if est.personaje_sel == est.personajes[0]:
+				self.kevin.draw()
+			elif est.personaje_sel == est.personajes[1]:
+				self.don_corru.draw()
+			elif est.personaje_sel == est.personajes[2]:
+				self.kenny.draw()
 		
 		glutSwapBuffers()
 

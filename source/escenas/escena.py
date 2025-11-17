@@ -30,8 +30,13 @@ class Escena(Objeto):
 			est.texturas_escena["Piso"] = self.texturas[3]
 			est.texturas_escena["Pared"] = self.texturas[4]
 			est.texturas_escena["Techo"] = self.texturas[5]
+		elif num == 2:
+			est.texturas_escena["Piso"] = self.texturas[6]
+			est.texturas_escena["Pared"] = self.texturas[7]
+			est.texturas_escena["Techo"] = self.texturas[8]
 
-	def draw_room(self):
+	def draw_room(self, nivel):
+		self.set_escenario(nivel)
 		glEnable(GL_TEXTURE_2D)
 		self.set_material_properties(self.rgb(255, 255, 255))
 

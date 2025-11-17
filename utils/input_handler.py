@@ -1,17 +1,19 @@
 from OpenGL.GLUT import * # type: ignore
 import utils.estado as est
 import source.objetos.pers_args as pers_args
+from source.escenas.menu import Menu
 
 class InputHandler:
-	def __init__(self, lighting_manager):
+	def __init__(self, lighting_manager, menu:Menu, estado_ventana):
 		self.lighting_manager = lighting_manager
+		self.menu:Menu = menu
+		self.estado_ventana = estado_ventana
 		self.estado = est
 		self.mouse_down = False
 		self.last_mouse_x = 0
 		self.last_mouse_y = 0
 		self.keys_pressed = set()
 		self.movement_speed = 0.3
-		self.menu = None
 
 	def set_menu(self, menu):
 		self.menu = menu
@@ -36,6 +38,9 @@ class InputHandler:
 		self.keys_pressed.add(key)
 		if key == 'q':
 			glutLeaveMainLoop()
+		if key == 'p':
+			self.menu.active = True
+			self.estado_ventana = est.estados_juego[0]
 		if key == 'm':
 			est.audio.toggle_musica()
 		if key == 'l':

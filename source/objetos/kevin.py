@@ -6,12 +6,6 @@ import math
 from .objeto import Objeto
 
 class Kevin(Objeto):
-	""" def set_material(self):
-		glMaterialfv(GL_FRONT, GL_AMBIENT, [0.2, 0.2, 0.2, 1.0])
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, [1.0, 0.8, 0.3, 1.0])
-		glMaterialfv(GL_FRONT, GL_SPECULAR, [1.0, 1.0, 1.0, 1.0])
-		glMaterialf(GL_FRONT, GL_SHININESS, 64.0) """
-
 	def draw_head(self):
 		glPushMatrix()
 		# glColor3f(198/255, 136/255, 99/255)
