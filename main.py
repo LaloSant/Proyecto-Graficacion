@@ -31,6 +31,9 @@ class MainWindow:
 		
 		self.game_state = est.estados_juego[0]  # ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 		self.input_handler = InputHandler(self.lighting_manager, self.menu, self.game_state)
+		# Cargar textura del logo
+		from utils.texturas import load_texture
+		self.logo_tex = load_texture("resources/imgs/LogoCC.png")
 
 	def _on_jugar(self):
 		self.game_state = est.estados_juego[1]
@@ -79,6 +82,13 @@ class MainWindow:
 			glPopMatrix()
 
 		if self.menu.active:
+			self.dibuja_menu_bg()
+			self.game_state = est.estados_juego[0]
+			self.menu.draw(self.width, self.height)
+		
+		glutSwapBuffers()
+
+	def dibuja_menu_bg(self):
 			glMatrixMode(GL_PROJECTION)
 			glPushMatrix()
 			glLoadIdentity()
@@ -90,7 +100,7 @@ class MainWindow:
 			glDisable(GL_DEPTH_TEST)
 			glEnable(GL_BLEND)
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-			glColor4f(0.2, 0.4, 0.8, 1.0)  # Azul claro
+			glColor4f(96/255, 171/255, 217/255, 1.0)
 			glBegin(GL_QUADS)
 			glVertex2f(0, 0)
 			glVertex2f(self.width, 0)
@@ -98,16 +108,27 @@ class MainWindow:
 			glVertex2f(0, self.height)
 			glEnd()
 			glDisable(GL_BLEND)
+		
+			glEnable(GL_TEXTURE_2D)
+			glBindTexture(GL_TEXTURE_2D, self.logo_tex)
+			logo_w, logo_h = 256 * 1.5, 128 * 1.5
+			x = (self.width - logo_w) // 2
+			y = 30 
+			glColor4f(1, 1, 1, 1)
+			glBegin(GL_QUADS)
+			glTexCoord2f(0, 1); glVertex2f(x, y)
+			glTexCoord2f(1, 1); glVertex2f(x + logo_w, y)
+			glTexCoord2f(1, 0); glVertex2f(x + logo_w, y + logo_h)
+			glTexCoord2f(0, 0); glVertex2f(x, y + logo_h)
+			glEnd()
+			glBindTexture(GL_TEXTURE_2D, 0)
+			glDisable(GL_TEXTURE_2D)
 			glEnable(GL_DEPTH_TEST)
 			glEnable(GL_LIGHTING)
 			glPopMatrix()
 			glMatrixMode(GL_PROJECTION)
 			glPopMatrix()
 			glMatrixMode(GL_MODELVIEW)
-			self.game_state = est.estados_juego[0]
-			self.menu.draw(self.width, self.height)
-		
-		glutSwapBuffers()
 
 def main():
 	glutInit()

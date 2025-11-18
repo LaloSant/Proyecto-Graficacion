@@ -142,7 +142,6 @@ class Menu:
 	def draw(self, width, height):
 		if not self.active:
 			return
-		
 		if self.state == est.estados_juego[1]:
 			self._draw_personajes_3d(width, height)
 		
