@@ -54,6 +54,11 @@ def animacion():
 		est.caminando_pct -= paso_pct * signo
 		if est.personaje_sel == "Aqui le pudieran mover" or True:
 			pers_args.caminando = 20 * math.sin(glutGet(GLUT_ELAPSED_TIME) / 200.0)
+	if est.estado_pers[0] == est.estados_pers[2]: #Brazos
+		if pers_args.brazos < 180:
+			pers_args.brazos = min(180, glutGet(GLUT_ELAPSED_TIME) / 50)
+		else:
+			pers_args.brazos = 180
 
 def _sign(x):
 	if x < 0:
