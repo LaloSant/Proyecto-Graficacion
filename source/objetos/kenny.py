@@ -74,8 +74,6 @@ class Kenny(Objeto):
 		glPopMatrix()
 
 	def draw_arms(self):
-
-
 		# Brazo derecho (originalmente a la derecha)
 		# manga
 		glPushMatrix()

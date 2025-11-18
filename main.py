@@ -145,7 +145,7 @@ def main():
 	glutDisplayFunc(window.display)
 	glutReshapeFunc(window.reshape)
 	glutKeyboardFunc(window.input_handler.keyboard)
-	glutKeyboardUpFunc(window.input_handler.keyboard_up)
+	# glutKeyboardUpFunc(window.input_handler.keyboard_up)
 	glutSpecialFunc(window.input_handler.special_keys)
 	glutMouseFunc(window.input_handler.mouse_click)
 	glutMotionFunc(window.input_handler.mouse_motion)

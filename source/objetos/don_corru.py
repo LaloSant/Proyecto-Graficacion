@@ -82,14 +82,22 @@ class DonCorru (Objeto):
 		glTranslatef(0, 1, 0)
 		glPushMatrix()
 		self.set_material_properties(self.rgb(176, 149, 116))
-		glRotatef(-pers_args.caminando, 0, 0, 1)
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(0, 1.2, 0)
+		else: 
+			glRotatef(-pers_args.caminando, 0, 0, 1)
 		glScalef(0.2, 0.66, 0.23)
 		glTranslate(0, -1.4, 2.7)
 		glutSolidCube(1)
 		glPopMatrix()
 		glPushMatrix()
 		self.set_material_properties(self.rgb(176, 149, 116))
-		glRotatef(pers_args.caminando, 0, 0, 1)
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(0, 1.2, 0)
+		else: 
+			glRotatef(pers_args.caminando, 0, 0, 1)
 		glScalef(0.2, 0.66, 0.23)
 		glTranslate(0, -1.4, -2.7)
 		glutSolidCube(1)

@@ -27,7 +27,10 @@ class InputHandler:
 		glutPostRedisplay()
 
 	def keyboard(self, key, x, y):
-		key = key.decode('utf-8').lower()
+		try:
+			key = key.decode('utf-8').lower()
+		except Exception:
+			print("")
 		self.keys_pressed.add(key)
 		if key == 'q':
 			glutLeaveMainLoop()
@@ -60,7 +63,8 @@ class InputHandler:
 				est.caminando_pct = +1
 			elif key == 'b':
 				est.estado_pers[0] = est.estados_pers[2]
-				pers_args.cambiar_estado(2)		#Set brazos
+				# pers_args.cambiar_estado(2)		#Set brazos
+				pers_args.brazos_arriba = not pers_args.brazos_arriba
 		glutPostRedisplay()
 	
 	def keyboard_up(self, key, x, y):
