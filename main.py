@@ -10,6 +10,7 @@ from utils.audio import Audio
 from source.objetos.don_corru import DonCorru
 from source.objetos.kevin import Kevin
 from source.objetos.kenny import Kenny
+from source.objetos.base_piramide import BasePiramide
 from source.escenas.escena import Escena
 from source.escenas.menu import Menu
 
@@ -21,6 +22,7 @@ class MainWindow:
 		self.don_corru = DonCorru()
 		self.kevin = Kevin()
 		self.kenny = Kenny()
+		self.piramides = [BasePiramide(-5), BasePiramide(0), BasePiramide(5)]
 		self.escena = Escena()
 		self.audio = Audio()
 		self.menu = Menu(
@@ -58,21 +60,50 @@ class MainWindow:
 		eye_y = est.camera_z * math.sin(angle_x_rad)
 		eye_z = est.camera_z * math.cos(angle_y_rad) * math.cos(angle_x_rad)
 		gluLookAt(eye_x, eye_y, eye_z, 0, 0, 0, 0, 1, 0)
-		self.escena.draw_room(est.nivel_sel)
-			
-		self.lighting_manager.apply_lighting()
-		glPushMatrix()
-		x, y, z = est.posiciones_pers[est.posicion_pers_sel]
-		glTranslatef(x, y, z)
-		if est.personaje_sel == est.personajes[0]:
-			self.kevin.draw()
-		elif est.personaje_sel == est.personajes[1]:
-			self.don_corru.draw()
-		elif est.personaje_sel == est.personajes[2]:
-			self.kenny.draw()
-		glPopMatrix()
+		
+		if not self.menu.active:
+			for piramide in self.piramides:
+				piramide.draw()
+			self.escena.draw_room(est.nivel_sel)
+			self.lighting_manager.apply_lighting()
+			glPushMatrix()
+			x, y, z = est.posiciones_pers[est.posicion_pers_sel]
+			glTranslatef(x, y, z)
+			if est.personaje_sel == est.personajes[0]:
+				self.kevin.draw()
+			elif est.personaje_sel == est.personajes[1]:
+				self.don_corru.draw()
+			elif est.personaje_sel == est.personajes[2]:
+				self.kenny.draw()
+
+			glPopMatrix()
 
 		if self.menu.active:
+			glMatrixMode(GL_PROJECTION)
+			glPushMatrix()
+			glLoadIdentity()
+			glOrtho(0, self.width, self.height, 0, -1, 1)
+			glMatrixMode(GL_MODELVIEW)
+			glPushMatrix()
+			glLoadIdentity()
+			glDisable(GL_LIGHTING)
+			glDisable(GL_DEPTH_TEST)
+			glEnable(GL_BLEND)
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			glColor4f(0.2, 0.4, 0.8, 1.0)  # Azul claro
+			glBegin(GL_QUADS)
+			glVertex2f(0, 0)
+			glVertex2f(self.width, 0)
+			glVertex2f(self.width, self.height)
+			glVertex2f(0, self.height)
+			glEnd()
+			glDisable(GL_BLEND)
+			glEnable(GL_DEPTH_TEST)
+			glEnable(GL_LIGHTING)
+			glPopMatrix()
+			glMatrixMode(GL_PROJECTION)
+			glPopMatrix()
+			glMatrixMode(GL_MODELVIEW)
 			self.game_state = est.estados_juego[0]
 			self.menu.draw(self.width, self.height)
 		

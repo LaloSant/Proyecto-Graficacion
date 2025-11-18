@@ -31,7 +31,7 @@ class Audio():
 	
 	def musica_on(self):
 		sonido = pygame.mixer.Sound("resources/audio/musica.mp3")
-		sonido.set_volume(0.7)
+		sonido.set_volume(1)
 		self.canal_audio_musica.play(sonido, loops=-1)
 
 	def musica_off(self):

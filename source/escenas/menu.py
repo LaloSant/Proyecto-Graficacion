@@ -1,3 +1,4 @@
+import math
 from OpenGL.GL import *  # type: ignore
 from OpenGL.GLUT import *  # type: ignore
 from OpenGL.GLU import *  # type: ignore
@@ -70,10 +71,10 @@ class Menu:
 		]
 		
 		self.buttons_personaje = [
-			Button(-200, 20, 100, 40, "Kevin", lambda: self._select_personaje(est.personajes[0])),
-			Button(0, 20, 120, 40, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
-			Button(200, 20, 100, 40, "Kenny", lambda: self._select_personaje(est.personajes[2])),
-			Button(-80, -50, 100, 40, "Volver", self._back_to_main)
+			Button(-200, -10, 100, 40, "Kevin", lambda: self._select_personaje(est.personajes[0])),
+			Button(0, -10, 120, 40, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
+			Button(200, -10, 100, 40, "Kenny", lambda: self._select_personaje(est.personajes[2])),
+			Button(-80, -100, 100, 40, "Volver", self._back_to_main)
 		]
 
 		self.buttons_niveles = [
@@ -196,7 +197,7 @@ class Menu:
 		glEnable(GL_LIGHTING)
 
 	def _draw_personajes_3d(self, width, height):
-		preview_size = 120
+		preview_size = 200
 		positions = [
 			(-200, -80, self.kevin),
 			(0, -80, self.don_corru),
@@ -225,7 +226,18 @@ class Menu:
 			glShadeModel(GL_SMOOTH)
 			glEnable(GL_NORMALIZE)
 			glEnable(GL_LIGHTING)
+			glPushMatrix()
+			if est.personaje_sel == "Don_corru" and isinstance(modelo, DonCorru):
+				glRotatef(glutGet(GLUT_ELAPSED_TIME) / 20, 0, 1, 0)
+				glScale(1.3, 1.3, 1.3)
+			if est.personaje_sel == "Kevin" and isinstance(modelo, Kevin):
+				glRotatef(glutGet(GLUT_ELAPSED_TIME) / 20, 0, 1, 0)
+				glScale(1.3, 1.3, 1.3)
+			if est.personaje_sel == "Kenny" and isinstance(modelo, Kenny):
+				glRotatef(glutGet(GLUT_ELAPSED_TIME) / 20, 0, 1, 0)
+				glScale(1.3, 1.3, 1.3)
 			modelo.draw()
+			glPopMatrix()
 			glDisable(GL_DEPTH_TEST)
 			glDisable(GL_LIGHTING)
 			glPopMatrix()
