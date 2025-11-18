@@ -58,6 +58,9 @@ class InputHandler:
 				est.estado_pers[0] = est.estados_pers[1]
 				est.posicion_pers_sel += 1
 				est.caminando_pct = +1
+			elif key == 'b':
+				est.estado_pers[0] = est.estados_pers[2]
+				pers_args.cambiar_estado(2)		#Set brazos
 		glutPostRedisplay()
 	
 	def keyboard_up(self, key, x, y):

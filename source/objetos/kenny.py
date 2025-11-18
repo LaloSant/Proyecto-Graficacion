@@ -89,7 +89,10 @@ class Kenny(Objeto):
 		glPushMatrix()
 		# glColor3f(1.0, 0, 0)
 		self.set_material_properties(self.rgb(255, 0, 0))
-		glRotatef(pers_args.caminando, 1, 0, 0)
+		if est.estado_pers[0] == est.estados_pers[2]:
+			glRotatef(-pers_args.brazos,1,0,0) #Brazos
+		else:
+			glRotatef(pers_args.caminando, 1, 0, 0)
 		glTranslatef(1.2, -0.5 , 0)
 		glScalef(0.25, 0.8, 0.25)
 		glutSolidCube(1)
