@@ -5,6 +5,7 @@ def agarrar_disco():
 	if len(est.piramides[est.posicion_pers_sel]) == 0:
 		return False
 	est.disco_agarrado = est.piramides[est.posicion_pers_sel].pop()
+	est.audio.sonido_corto(5)
 	return True
 
 def poner_disco():
@@ -15,6 +16,7 @@ def poner_disco():
 	est.disco_agarrado = None
 	disco.posicion = [disco.posicion[0], est.posiciones_discos_y[long], 0]
 	est.piramides[est.posicion_pers_sel].append(disco)
+	est.audio.sonido_corto(5)
 	return True
 
 def posicion_valida():

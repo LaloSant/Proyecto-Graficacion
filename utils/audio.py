@@ -12,6 +12,7 @@ class Audio():
 			,self.load("resources/audio/nivel_2.mp3")
 			,self.load("resources/audio/nivel_3.mp3")
 			,self.load("resources/audio/win.mp3")
+			,self.load("resources/audio/click.mp3")
 		]
 		self.musica_on(self.cancion_act)
 	
@@ -23,9 +24,9 @@ class Audio():
 			return None
 
 	def sonido_corto(self, num:int):
-		sonido = pygame.mixer.Sound("")
-		sonido.set_volume(1)
-		self.canal_audio_sfx.play(sonido)
+		sonido = self.sonidos[num]
+		sonido.set_volume(1) # type: ignore
+		self.canal_audio_sfx.play(sonido) # type: ignore
 
 	def toggle_musica(self):
 		if self.canal_audio_musica.get_busy():
@@ -36,7 +37,7 @@ class Audio():
 	def musica_on(self, cancion:int):
 		self.cancion_act = cancion
 		sonido = self.sonidos[cancion]
-		sonido.set_volume(1) # type: ignore
+		sonido.set_volume(0.7) # type: ignore
 		self.canal_audio_musica.play(sonido, loops=-1) # type: ignore
 
 	def musica_off(self):
