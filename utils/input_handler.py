@@ -2,6 +2,7 @@ from OpenGL.GLUT import * # type: ignore
 import utils.estado as est
 import source.objetos.pers_args as pers_args
 from source.escenas.menu import Menu
+import utils.juego as game
 
 class InputHandler:
 	def __init__(self, lighting_manager, menu:Menu, estado_ventana):
@@ -39,15 +40,15 @@ class InputHandler:
 			self.estado_ventana = est.estados_juego[0]
 		if key == 'm':
 			est.audio.toggle_musica()
-		if key == 'l':
+		""" if key == 'l':
 			self.lighting_manager.cycle_lighting_model()
-			self.keys_pressed.discard('l')
-		if key == 'c':
+			self.keys_pressed.discard('l') """
+		""" if key == 'c':
 			if est.estado_pers[0] == est.estados_pers[0]:
 				pers_args.cambiar_estado(1)		#Set caminando
 			elif est.estado_pers[0] == est.estados_pers[1]:
 				pers_args.cambiar_estado(0)		#Set estatico
-			self.keys_pressed.discard('c')
+			self.keys_pressed.discard('c') """
 		if not self.menu.active and est.caminando_pct == 0:
 			if key == 'a':
 				if est.posicion_pers_sel <= -1 or est.caminando_pct != 0:
@@ -62,9 +63,19 @@ class InputHandler:
 				est.posicion_pers_sel += 1
 				est.caminando_pct = +1
 			elif key == 'b':
-				est.estado_pers[0] = est.estados_pers[2]
-				# pers_args.cambiar_estado(2)		#Set brazos
-				pers_args.brazos_arriba = not pers_args.brazos_arriba
+				if not pers_args.brazos_arriba:
+					if game.agarrar_disco():
+						est.estado_pers[0] = est.estados_pers[2]
+						pers_args.brazos_arriba = not pers_args.brazos_arriba
+					else:
+						print("No disco")
+				else:
+					if est.disco_agarrado:
+						if game.poner_disco():
+							est.estado_pers[0] = est.estados_pers[2]
+							pers_args.brazos_arriba = not pers_args.brazos_arriba
+
+
 		glutPostRedisplay()
 	
 	def keyboard_up(self, key, x, y):

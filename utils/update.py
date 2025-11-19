@@ -68,7 +68,12 @@ def _sign(x):
 	else:
 		return 1
 
+def disco_agarrado():
+	if pers_args.brazos_arriba and est.disco_agarrado:
+		est.disco_agarrado.posicion = [est.posiciones_pers[est.posicion_pers_sel][0], est.posiciones_pers[est.posicion_pers_sel][1] + 1.7, est.posiciones_pers[est.posicion_pers_sel][2]]
+
 def update(value):
+	disco_agarrado()
 	animacion()
 	glutPostRedisplay()
 	glutTimerFunc(16, update, 0)

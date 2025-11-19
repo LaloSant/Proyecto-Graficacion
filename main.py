@@ -7,12 +7,15 @@ from utils.input_handler import InputHandler
 import utils.estado as est
 import utils.update as updt
 from utils.audio import Audio
+from utils.juego import *
 from source.objetos.don_corru import DonCorru
 from source.objetos.kevin import Kevin
 from source.objetos.kenny import Kenny
 from source.objetos.base_piramide import BasePiramide
+from source.objetos.disco import Disco
 from source.escenas.escena import Escena
 from source.escenas.menu import Menu
+
 
 class MainWindow:
 	def __init__(self, width=800, height=600):
@@ -23,6 +26,7 @@ class MainWindow:
 		self.kevin = Kevin()
 		self.kenny = Kenny()
 		self.piramides = [BasePiramide(-5), BasePiramide(0), BasePiramide(5)]
+		self.niveles = [Nivel1(), Nivel2(), Nivel3()]
 		self.escena = Escena()
 		self.audio = Audio()
 		self.menu = Menu(
@@ -37,6 +41,8 @@ class MainWindow:
 
 	def _on_jugar(self):
 		self.game_state = est.estados_juego[1]
+		nivel = self.niveles[est.nivel_sel + 1]
+		nivel.reiniciar()
 
 	def init_gl(self):
 		glEnable(GL_DEPTH_TEST)
@@ -67,6 +73,10 @@ class MainWindow:
 		if not self.menu.active:
 			for piramide in self.piramides:
 				piramide.draw()
+			for disco in est.discos:
+				glPushMatrix()
+				disco.draw()
+				glPopMatrix()
 			self.escena.draw_room(est.nivel_sel)
 			self.lighting_manager.apply_lighting()
 			glPushMatrix()

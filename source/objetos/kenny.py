@@ -177,6 +177,7 @@ class Kenny(Objeto):
 
 	def draw(self):
 		glPushMatrix()
+		glScalef(0.9, 0.9, 0.9)
 		""" if state.reaction_type == "jump":
 			y_offset = math.sin(math.pi * state.reaction_timer / state.reaction_duration) * 0.8
 			glTranslatef(0, y_offset, 0)

@@ -64,24 +64,24 @@ class Menu:
 		self.on_salir = on_salir
 		
 		self.buttons_main = [
-			Button(-200, 50, 120, 40, "Jugar", self._on_jugar),
-			Button(0, 50, 250, 40, "Seleccionar Personaje", self._on_personaje),
-			Button(200, 50, 100, 40, "Niveles", self._on_niveles),
-			Button(-80, -50, 100, 40, "Salir", self._on_salir)
+			Button(-200, -50, 120, 40, "Jugar", self._on_jugar),
+			Button(0, -50, 250, 40, "Seleccionar Personaje", self._on_personaje),
+			Button(200, -50, 100, 40, "Niveles", self._on_niveles),
+			Button(-200, -230, 120, 40, "Salir", self._on_salir)
 		]
 		
 		self.buttons_personaje = [
-			Button(-200, -10, 100, 40, "Kevin", lambda: self._select_personaje(est.personajes[0])),
-			Button(0, -10, 120, 40, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
-			Button(200, -10, 100, 40, "Kenny", lambda: self._select_personaje(est.personajes[2])),
-			Button(-80, -100, 100, 40, "Volver", self._back_to_main)
+			Button(-200, -80, 200, 200, "Kevin", lambda: self._select_personaje(est.personajes[0])),
+			Button(0, -80, 200, 200, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
+			Button(200, -80, 200, 200, "Kenny", lambda: self._select_personaje(est.personajes[2])),
+			Button(-200, -230, 120, 40, "Volver", self._back_to_main)
 		]
 
 		self.buttons_niveles = [
-			Button(-200, 20, 100, 40, "Tutorial", lambda: self._select_nivel(0)),
-			Button(0, 20, 120, 40, "3 Niveles", lambda: self._select_nivel(1)),
-			Button(200, 20, 100, 40, "4 Niveles", lambda: self._select_nivel(2)),
-			Button(-80, -50, 100, 40, "Volver", self._back_to_main)
+			Button(-200,-50, 100, 40, "Tutorial", lambda: self._select_nivel(0)),
+			Button(0,-50, 120, 40, "3 Niveles", lambda: self._select_nivel(1)),
+			Button(200,-50, 100, 40, "4 Niveles", lambda: self._select_nivel(2)),
+			Button(-200, -230, 120, 40, "Volver", self._back_to_main)
 		]
 		
 		self.kevin = Kevin()
@@ -174,7 +174,7 @@ class Menu:
 		elif self.state == est.estados_juego[2]:
 			title = "SELECCIONAR NIVEL"
 
-		glRasterPos2f(-len(title) * 5, height/2 - 50)
+		glRasterPos2f(-len(title) * 5 - 30, height/2 - 250)
 		for char in title:
 			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
 
@@ -183,7 +183,10 @@ class Menu:
 				button.draw_2d()
 		elif self.state == est.estados_juego[1]:
 			for button in self.buttons_personaje:
-				button.draw_2d()
+				if button.label == "Volver":
+					button.draw_2d()
+				""" else:
+					button.draw_2d() """
 		elif self.state == est.estados_juego[2]:
 			for button in self.buttons_niveles:
 				button.draw_2d()
@@ -196,14 +199,14 @@ class Menu:
 		glEnable(GL_LIGHTING)
 
 	def _draw_personajes_3d(self, width, height):
-		preview_size = 200
+		preview_size = 250
 		positions = [
-			(-200, -80, self.kevin),
-			(0, -80, self.don_corru),
-			(200, -80, self.kenny),
+			(-200, 80, self.kevin, "Kevin"),
+			(0, 80, self.don_corru, "Don_corru"),
+			(200, 80, self.kenny, "Kenny"),
 		]
 		
-		for pos_x, pos_y, modelo in positions:
+		for pos_x, pos_y, modelo, personaje_name in positions:
 			viewport_x = int(width/2 + pos_x - preview_size/2)
 			viewport_y = int(height/2 - pos_y - preview_size/2)
 			glViewport(viewport_x, viewport_y, preview_size, preview_size)
@@ -226,15 +229,13 @@ class Menu:
 			glEnable(GL_NORMALIZE)
 			glEnable(GL_LIGHTING)
 			glPushMatrix()
-			if est.personaje_sel == "Don_corru" and isinstance(modelo, DonCorru):
+			es_seleccionado = est.personaje_sel == personaje_name
+			if es_seleccionado:
 				glRotatef(glutGet(GLUT_ELAPSED_TIME) / 20, 0, 1, 0)
-				glScale(1.3, 1.3, 1.3)
-			if est.personaje_sel == "Kevin" and isinstance(modelo, Kevin):
-				glRotatef(glutGet(GLUT_ELAPSED_TIME) / 20, 0, 1, 0)
-				glScale(1.3, 1.3, 1.3)
-			if est.personaje_sel == "Kenny" and isinstance(modelo, Kenny):
-				glRotatef(glutGet(GLUT_ELAPSED_TIME) / 20, 0, 1, 0)
-				glScale(1.3, 1.3, 1.3)
+				glClearColor(0.8, 0.8, 0.8, 1.0)
+			else:
+				glScalef(0.8, 0.8, 0.8)
+				glClearColor(0.0, 0.0, 0.0, 1.0)
 			modelo.draw()
 			glPopMatrix()
 			glDisable(GL_DEPTH_TEST)

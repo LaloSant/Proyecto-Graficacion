@@ -1,4 +1,6 @@
+from typing import Optional
 from utils.audio import Audio
+from source.objetos.disco import Disco
 
 camera_x = 0.0
 camera_y = 0.0
@@ -31,6 +33,16 @@ posiciones_pers = {
 	1: [0.0, 0, -2]
 }
 posicion_pers_sel = 0
+
+posiciones_discos_y = (-1, -0.5, 0)
+
+piramides = {
+	-1: [],
+	0: [],
+	1: []
+}
+discos:list[Disco] = []
+disco_agarrado:Disco
 
 audio:Audio
 
