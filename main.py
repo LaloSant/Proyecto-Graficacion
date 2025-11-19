@@ -16,6 +16,12 @@ from source.objetos.disco import Disco
 from source.escenas.escena import Escena
 from source.escenas.menu import Menu
 
+def render_text(x, y, text):
+	"""Renderiza texto en la pantalla usando GLUT bitmap fonts"""
+	glRasterPos2f(x, y)
+	for char in text:
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
+
 
 class MainWindow:
 	def __init__(self, width=800, height=600):
@@ -43,6 +49,9 @@ class MainWindow:
 		self.game_state = est.estados_juego[1]
 		nivel = self.niveles[est.nivel_sel + 1]
 		nivel.reiniciar()
+		# Resetear contadores y estado de victoria
+		est.total_movimientos_discos = 0
+		est.juego_completado = False
 
 	def init_gl(self):
 		glEnable(GL_DEPTH_TEST)
@@ -90,6 +99,9 @@ class MainWindow:
 				self.kenny.draw()
 
 			glPopMatrix()
+			
+			# Dibujar contador de movimientos
+			self.dibuja_contador_movimientos()
 
 		if self.menu.active:
 			self.dibuja_menu_bg()
@@ -97,6 +109,63 @@ class MainWindow:
 			self.menu.draw(self.width, self.height)
 		
 		glutSwapBuffers()
+
+	def dibuja_contador_movimientos(self):
+		
+		glMatrixMode(GL_PROJECTION)
+		glPushMatrix()
+		glLoadIdentity()
+		glOrtho(0, self.width, self.height, 0, -1, 1)
+		glMatrixMode(GL_MODELVIEW)
+		glPushMatrix()
+		glLoadIdentity()
+		glDisable(GL_LIGHTING)
+		glDisable(GL_DEPTH_TEST)
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+		
+		
+		box_x, box_y = 20, 80
+		box_height = 100 if est.juego_completado else 70
+		box_width, box_height = 300, box_height
+		glColor4f(0, 0, 0, 0.7)
+		glBegin(GL_QUADS)
+		glVertex2f(box_x, box_y)
+		glVertex2f(box_x + box_width, box_y)
+		glVertex2f(box_x + box_width, box_y + box_height)
+		glVertex2f(box_x, box_y + box_height)
+		glEnd()
+		
+		
+		glColor4f(1, 1, 1, 1)
+		glLineWidth(2)
+		glBegin(GL_LINE_LOOP)
+		glVertex2f(box_x, box_y)
+		glVertex2f(box_x + box_width, box_y)
+		glVertex2f(box_x + box_width, box_y + box_height)
+		glVertex2f(box_x, box_y + box_height)
+		glEnd()
+		glLineWidth(1)
+		
+		
+		text_y = box_y + 15
+		glColor3f(1, 1, 1)
+		render_text(box_x + 10, text_y, f"Total de Movimientos: {est.total_movimientos_discos}")
+		
+		
+		
+		if est.juego_completado:
+			text_y -= 25
+			glColor3f(0, 1, 0)
+			render_text(box_x + 10, text_y, "¡JUEGO COMPLETADO!")
+		
+		glDisable(GL_BLEND)
+		glEnable(GL_DEPTH_TEST)
+		glEnable(GL_LIGHTING)
+		glPopMatrix()
+		glMatrixMode(GL_PROJECTION)
+		glPopMatrix()
+		glMatrixMode(GL_MODELVIEW)
 
 	def dibuja_menu_bg(self):
 			glMatrixMode(GL_PROJECTION)

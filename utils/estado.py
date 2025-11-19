@@ -42,9 +42,15 @@ piramides = {
 	1: []
 }
 discos:list[Disco] = []
-disco_agarrado:Disco
+disco_agarrado:Disco = None
 
 audio:Audio
+
+# Contador total de movimientos de discos
+total_movimientos_discos = 0
+
+# Variable para indicar si el juego está completado
+juego_completado = False
 
 estados_juego = ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 

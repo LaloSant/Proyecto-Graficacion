@@ -10,8 +10,9 @@ def agarrar_disco():
 def poner_disco():
 	long = len(est.piramides[est.posicion_pers_sel])
 	if not posicion_valida():
-		print("nao nao")
+		print("Nao, nao")
 		return False
+	
 	disco = est.disco_agarrado
 	est.disco_agarrado = None
 	disco.posicion = [disco.posicion[0], est.posiciones_discos_y[long], 0]
@@ -25,6 +26,18 @@ def posicion_valida():
 	disco_peek = est.piramides[est.posicion_pers_sel][leng - 1]
 	disco = est.disco_agarrado
 	return not disco.tamanio > disco_peek.tamanio
+
+def verificar_victoria():
+	"""Verifica si la Torre de Hanoi está completa (todos los discos en la posición 1)"""
+	if len(est.discos) == 0:
+		return False
+	if len(est.piramides[1]) != len(est.discos):
+		return False
+	# Verificar que todos los discos estén en orden correcto
+	for i in range(len(est.discos)):
+		if est.piramides[1][i].tamanio != i + 1:
+			return False
+	return True
 
 
 class Nivel2():
@@ -48,20 +61,38 @@ class Nivel2():
 
 class Nivel1():
 	def __init__(self) -> None:
+		self.reiniciar()
+	
+	def reiniciar(self):
 		est.discos = [Disco(1)
-						,Disco(2)
-						,Disco(3)
+					,Disco(2)
+					,Disco(3)
 				]
-		est.discos[0].posicion = [-5, est.posiciones_discos_y[0], 0]
+		est.piramides[-1].clear()
+		est.piramides[0].clear()
+		est.piramides[1].clear()
+		est.piramides[-1].append(est.discos[2])
+		est.piramides[-1].append(est.discos[1])
+		est.piramides[-1].append(est.discos[0])
+		est.discos[0].posicion = [-5, est.posiciones_discos_y[2], 0]
 		est.discos[1].posicion = [-5, est.posiciones_discos_y[1], 0]
-		est.discos[2].posicion = [-5, est.posiciones_discos_y[2], 0]
+		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
 
 class Nivel3():
 	def __init__(self) -> None:
+		self.reiniciar()
+	
+	def reiniciar(self):
 		est.discos = [Disco(1)
-						,Disco(2)
-						,Disco(3)
+					,Disco(2)
+					,Disco(3)
 				]
-		est.discos[0].posicion = [-5, est.posiciones_discos_y[0], 0]
+		est.piramides[-1].clear()
+		est.piramides[0].clear()
+		est.piramides[1].clear()
+		est.piramides[-1].append(est.discos[2])
+		est.piramides[-1].append(est.discos[1])
+		est.piramides[-1].append(est.discos[0])
+		est.discos[0].posicion = [-5, est.posiciones_discos_y[2], 0]
 		est.discos[1].posicion = [-5, est.posiciones_discos_y[1], 0]
-		est.discos[2].posicion = [-5, est.posiciones_discos_y[2], 0]
+		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
