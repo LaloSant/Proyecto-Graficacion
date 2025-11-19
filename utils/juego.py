@@ -71,6 +71,13 @@ class Nivel1():
 					,Disco(2)
 					,Disco(3)
 				]
+		est.posiciones_pers = {
+				-1: [0.0, 0, -2],
+				0: [0.0, 0, -2],
+				1: [0.0, 0, -2]
+			}
+		est.posicion_pers_sel = 0
+		est.total_movimientos_discos = 0
 		est.piramides[-1].clear()
 		est.piramides[0].clear()
 		est.piramides[1].clear()

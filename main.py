@@ -109,6 +109,9 @@ class MainWindow:
 		
 		glutSwapBuffers()
 
+
+	
+
 	def dibuja_contador_movimientos(self):
 		
 		glMatrixMode(GL_PROJECTION)
@@ -150,14 +153,10 @@ class MainWindow:
 		text_y = box_y + 15
 		glColor3f(1, 1, 1)
 		render_text(box_x + 10, text_y, f"Total de Movimientos: {est.total_movimientos_discos}")
-		
-		
-		
 		if est.juego_completado:
 			text_y -= 25
 			glColor3f(0, 1, 0)
 			render_text(box_x + 10, text_y, "¡JUEGO COMPLETADO!")
-		
 		glDisable(GL_BLEND)
 		glEnable(GL_DEPTH_TEST)
 		glEnable(GL_LIGHTING)

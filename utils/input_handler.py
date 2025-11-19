@@ -36,6 +36,7 @@ class InputHandler:
 		if key == 'q':
 			glutLeaveMainLoop()
 		if key == 'p':
+			pers_args.brazos_arriba = False
 			self.menu.active = True
 			self.estado_ventana = est.estados_juego[0]
 		if key == 'm':
