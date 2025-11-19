@@ -34,8 +34,11 @@ def verificar_victoria():
 	if len(est.piramides[1]) != len(est.discos):
 		return False
 	# Verificar que todos los discos estén en orden correcto
+	# El orden en la pila va de abajo (índice 0) a arriba (último índice).
+	# El disco más grande tiene tamanio == len(est.discos) y debe estar abajo.
 	for i in range(len(est.discos)):
-		if est.piramides[1][i].tamanio != i + 1:
+		expected = len(est.discos) - i
+		if est.piramides[1][i].tamanio != expected:
 			return False
 	return True
 

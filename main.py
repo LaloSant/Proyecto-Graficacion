@@ -49,7 +49,6 @@ class MainWindow:
 		self.game_state = est.estados_juego[1]
 		nivel = self.niveles[est.nivel_sel + 1]
 		nivel.reiniciar()
-		# Resetear contadores y estado de victoria
 		est.total_movimientos_discos = 0
 		est.juego_completado = False
 

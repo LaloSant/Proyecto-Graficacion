@@ -63,7 +63,6 @@ class InputHandler:
 				est.posicion_pers_sel += 1
 				est.caminando_pct = +1
 			elif key == 'b':
-				# No permitir agarrar discos si el juego ya está completado
 				if est.juego_completado:
 					return
 				if not pers_args.brazos_arriba:
@@ -72,17 +71,14 @@ class InputHandler:
 						pers_args.brazos_arriba = not pers_args.brazos_arriba
 					else:
 						print("No disco")
-			else:
-				
-				if est.disco_agarrado is not None:
+				else:
+					if est.disco_agarrado is None:
+						return
 					if game.poner_disco():
 						est.estado_pers[0] = est.estados_pers[2]
-						
 						est.total_movimientos_discos += 1
-						# Verificar si se completó la Torre de Hanoi
 						if game.verificar_victoria():
 							est.juego_completado = True
-						
 						pers_args.brazos_arriba = not pers_args.brazos_arriba
 					
 		glutPostRedisplay()
