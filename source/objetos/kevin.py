@@ -61,21 +61,29 @@ class Kevin(Objeto):
 		glPopMatrix()
 
 	def draw_arms(self):
-		# Brazo izquierdo
+		# Brazo derecho
 		glPushMatrix()
 		self.set_material_properties(self.rgb(198, 136, 99))
-		glTranslatef(-1.0, 0.9, 0)
-		glRotatef(-pers_args.caminando, 1, 0, 0)
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(1.0, -0.8, 0)
+		else:
+			glTranslatef(-1.0, 0.9, 0)
+			glRotatef(-pers_args.caminando, 1, 0, 0)
 		glTranslatef(0, -0.6, 0)
 		glScalef(.4, 1.2, .3)
 		glutSolidCube(1.0)
 		glPopMatrix()
 
-		# Brazo derecho
+		# Brazo izquierdo
 		glPushMatrix()
 		self.set_material_properties(self.rgb(198, 136, 99))
-		glTranslatef(1.0, 0.9, 0)
-		glRotatef(pers_args.caminando, 1, 0, 0)
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(-1.0, -0.8, 0)
+		else:
+			glTranslatef(1.0, 0.9, 0)
+			glRotatef(pers_args.caminando, 1, 0, 0)
 		glTranslatef(0, -0.6, 0)
 		glScalef(.4, 1.2, .3)
 		glutSolidCube(1.0)
