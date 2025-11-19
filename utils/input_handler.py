@@ -1,8 +1,8 @@
 from OpenGL.GLUT import * # type: ignore
 import utils.estado as est
+import utils.juego as game
 import source.objetos.pers_args as pers_args
 from source.escenas.menu import Menu
-import utils.juego as game
 
 class InputHandler:
 	def __init__(self, lighting_manager, menu:Menu, estado_ventana):
@@ -31,25 +31,19 @@ class InputHandler:
 		try:
 			key = key.decode('utf-8').lower()
 		except Exception:
-			print("")
+			print("", end="")
 		self.keys_pressed.add(key)
 		if key == 'q':
 			glutLeaveMainLoop()
-		if key == 'p':
+		if key == 'p' and not self.menu.active:
 			pers_args.brazos_arriba = False
 			self.menu.active = True
 			self.estado_ventana = est.estados_juego[0]
+			est.audio.musica_on(0)
 		if key == 'm':
 			est.audio.toggle_musica()
-		""" if key == 'l':
-			self.lighting_manager.cycle_lighting_model()
-			self.keys_pressed.discard('l') """
-		""" if key == 'c':
-			if est.estado_pers[0] == est.estados_pers[0]:
-				pers_args.cambiar_estado(1)		#Set caminando
-			elif est.estado_pers[0] == est.estados_pers[1]:
-				pers_args.cambiar_estado(0)		#Set estatico
-			self.keys_pressed.discard('c') """
+		if key == "w":
+			est.juego_completado = True
 		if not self.menu.active and est.caminando_pct == 0:
 			if key == 'a':
 				if est.posicion_pers_sel <= -1 or est.caminando_pct != 0:
@@ -70,8 +64,6 @@ class InputHandler:
 					if game.agarrar_disco():
 						est.estado_pers[0] = est.estados_pers[2]
 						pers_args.brazos_arriba = not pers_args.brazos_arriba
-					else:
-						print("No disco")
 				else:
 					if est.disco_agarrado is None:
 						return
@@ -80,6 +72,7 @@ class InputHandler:
 						est.total_movimientos_discos += 1
 						if game.verificar_victoria():
 							est.juego_completado = True
+							est.audio.musica_on(4)
 						pers_args.brazos_arriba = not pers_args.brazos_arriba
 					
 		glutPostRedisplay()
@@ -100,6 +93,50 @@ class InputHandler:
 				self.menu.handle_click(gl_x, gl_y)
 			glutPostRedisplay()
 			return
+
+		# Si el juego está completado, comprobar botones del cuadro central
+		if est.juego_completado and button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+			# Usamos las mismas dimensiones de ventana que en el código principal
+			width = 1000
+			height = 600
+			cx = width // 2
+			cy = height // 2
+			w = 520
+			h = 240
+			bx = cx - w//2
+			by = cy - h//2
+			# Botones
+			btn_w = 200
+			btn_h = 50
+			left_btn_x = int(bx + w*0.25 - btn_w/2)
+			right_btn_x = int(bx + w*0.75 - btn_w/2)
+			btn_y = int(by + h - 80)
+			# Verificar click en Menu principal
+			if left_btn_x <= x <= left_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
+				# Volver al menú principal
+				self.menu.active = True
+				est.juego_completado = False
+				glutPostRedisplay()
+				return
+			# Verificar click en Siguiente nivel
+			if right_btn_x <= x <= right_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
+				# Avanzar al siguiente nivel (si existe) y reiniciar
+				import utils.juego as game
+				next_lvl = min(est.nivel_sel + 1, 2)
+				if next_lvl == 0:
+					lvl = game.Nivel1()
+					lvl.reiniciar()
+				elif next_lvl == 1:
+					lvl = game.Nivel2()
+					lvl.reiniciar()
+				else:
+					lvl = game.Nivel3()
+					lvl.reiniciar()
+				est.nivel_sel = next_lvl
+				est.total_movimientos_discos = 0
+				est.juego_completado = False
+				glutPostRedisplay()
+				return
 
 		if button == 3:
 			self.estado.camera_z -= 0.5

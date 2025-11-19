@@ -5,11 +5,11 @@ from OpenGL.GLU import *	# type: ignore
 from .objeto import Objeto	# type: ignore
 
 class Disco (Objeto):
-	def __init__(self, tamanio, ):
-		self.posicion = [-5, 0, 0]
+	def __init__(self, tamanio):
+		self.posicion = [-5, 0.0, 0]
 		if tamanio == 1:
-			self.radio_ext = 0.5
-			self.radio_int = 0.3
+			self.radio_ext = 0.4
+			self.radio_int = 0.2
 			self.color = (178, 54, 18)
 			self.factor_esc_y = 0.8
 		elif tamanio == 2:
@@ -31,7 +31,11 @@ class Disco (Objeto):
 
 	def draw(self):
 		glPushMatrix()
+		temp = self.posicion[1]
+		if self.tamanio == 1:
+			self.posicion[1] -= 0.08
 		glTranslatef(self.posicion[0], self.posicion[1], self.posicion[2])
+		self.posicion[1] = temp
 		glScale(1, self.factor_esc_y, 1)
 		glRotatef(90, 1, 0, 0)
 		self.draw_dona()

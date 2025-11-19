@@ -18,7 +18,7 @@ class BasePiramide (Objeto):
 	def draw_base(self):
 		glPushMatrix()
 		self.set_material_properties(self.rgb(126, 84, 48))
-		glScalef(4, 0.25, 4)
+		glScalef(3.5, 0.45, 3.5)
 		glutSolidCube(1)
 		glPopMatrix()
 	

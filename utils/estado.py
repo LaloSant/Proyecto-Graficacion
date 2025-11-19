@@ -9,9 +9,9 @@ camera_angle_x = 15
 camera_angle_y = 0.0
 
 scene_bounds = {
-    "x": (-40, 40),
+    "x": (-20, 40),
     "y": (-2, 20),
-    "z": (-60, 60)
+    "z": (-40, 60)
 }
 
 texturas_escena = {"Piso": None
@@ -32,9 +32,18 @@ posiciones_pers = {
 	0: [0.0, 0, -2],
 	1: [0.0, 0, -2]
 }
+
+def rest_pos_pers():
+	global posiciones_pers
+	posiciones_pers = {
+	-1: [0.0, 0, -2],
+	0: [0.0, 0, -2],
+	1: [0.0, 0, -2]
+}
+
 posicion_pers_sel = 0
 
-posiciones_discos_y = (-1, -0.5, 0)
+posiciones_discos_y = (-1, -0.5, 0, 0.5)
 
 piramides = {
 	-1: [],
@@ -42,7 +51,7 @@ piramides = {
 	1: []
 }
 discos:list[Disco] = []
-disco_agarrado:Disco = None
+disco_agarrado:Disco = None # type: ignore
 
 audio:Audio
 

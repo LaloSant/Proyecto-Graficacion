@@ -2,12 +2,15 @@ from OpenGL.GL import *		# type: ignore
 from OpenGL.GLUT import *	# type: ignore
 from OpenGL.GLU import *	# type: ignore
 import math
+
 from utils.lighting import LightingManager
 from utils.input_handler import InputHandler
-import utils.estado as est
-import utils.update as updt
+from utils.texturas import load_texture
 from utils.audio import Audio
 from utils.juego import *
+import utils.estado as est
+import utils.update as updt
+
 from source.objetos.don_corru import DonCorru
 from source.objetos.kevin import Kevin
 from source.objetos.kenny import Kenny
@@ -17,11 +20,9 @@ from source.escenas.escena import Escena
 from source.escenas.menu import Menu
 
 def render_text(x, y, text):
-	"""Renderiza texto en la pantalla usando GLUT bitmap fonts"""
 	glRasterPos2f(x, y)
 	for char in text:
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
-
 
 class MainWindow:
 	def __init__(self, width=800, height=600):
@@ -32,22 +33,21 @@ class MainWindow:
 		self.kevin = Kevin()
 		self.kenny = Kenny()
 		self.piramides = [BasePiramide(-5), BasePiramide(0), BasePiramide(5)]
+		# self.audio = Audio()
+		est.audio = Audio()
 		self.niveles = [Nivel1(), Nivel2(), Nivel3()]
 		self.escena = Escena()
-		self.audio = Audio()
 		self.menu = Menu(
 			on_jugar = self._on_jugar,
 		)
 		
 		self.game_state = est.estados_juego[0]  # ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 		self.input_handler = InputHandler(self.lighting_manager, self.menu, self.game_state)
-		# Cargar textura del logo
-		from utils.texturas import load_texture
 		self.logo_tex = load_texture("resources/imgs/LogoCC.png")
 
 	def _on_jugar(self):
 		self.game_state = est.estados_juego[1]
-		nivel = self.niveles[est.nivel_sel + 1]
+		nivel = self.niveles[est.nivel_sel]
 		nivel.reiniciar()
 		est.total_movimientos_discos = 0
 		est.juego_completado = False
@@ -96,24 +96,16 @@ class MainWindow:
 				self.don_corru.draw()
 			elif est.personaje_sel == est.personajes[2]:
 				self.kenny.draw()
-
 			glPopMatrix()
-			
-			# Dibujar contador de movimientos
 			self.dibuja_contador_movimientos()
 
 		if self.menu.active:
 			self.dibuja_menu_bg()
 			self.game_state = est.estados_juego[0]
 			self.menu.draw(self.width, self.height)
-		
 		glutSwapBuffers()
 
-
-	
-
 	def dibuja_contador_movimientos(self):
-		
 		glMatrixMode(GL_PROJECTION)
 		glPushMatrix()
 		glLoadIdentity()
@@ -125,11 +117,9 @@ class MainWindow:
 		glDisable(GL_DEPTH_TEST)
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-		
-		
 		box_x, box_y = 20, 80
-		box_height = 100 if est.juego_completado else 70
-		box_width, box_height = 300, box_height
+		box_height = 100
+		box_width = 300
 		glColor4f(0, 0, 0, 0.7)
 		glBegin(GL_QUADS)
 		glVertex2f(box_x, box_y)
@@ -137,8 +127,7 @@ class MainWindow:
 		glVertex2f(box_x + box_width, box_y + box_height)
 		glVertex2f(box_x, box_y + box_height)
 		glEnd()
-		
-		
+
 		glColor4f(1, 1, 1, 1)
 		glLineWidth(2)
 		glBegin(GL_LINE_LOOP)
@@ -148,15 +137,107 @@ class MainWindow:
 		glVertex2f(box_x, box_y + box_height)
 		glEnd()
 		glLineWidth(1)
-		
-		
-		text_y = box_y + 15
+
+		text_y = box_y + 30
 		glColor3f(1, 1, 1)
-		render_text(box_x + 10, text_y, f"Total de Movimientos: {est.total_movimientos_discos}")
+		render_text(box_x + 10, text_y - 5, f"Total de Movimientos: {est.total_movimientos_discos}")
+		render_text(box_x + 10, text_y + 20, "Controles: ")
+		render_text(box_x + 30, text_y + 40, "a / d : Mover personaje")
+		render_text(box_x + 30, text_y + 60, "b : Agarrar o dejar disco")
 		if est.juego_completado:
 			text_y -= 25
-			glColor3f(0, 1, 0)
-			render_text(box_x + 10, text_y, "¡JUEGO COMPLETADO!")
+			cx = self.width // 2
+			cy = self.height // 2
+			w = 520
+			h = 240
+			bx = cx - w//2
+			by = cy - h//2
+			glColor4f(0, 0, 0, 0.5)
+			glBegin(GL_QUADS)
+			glVertex2f(bx + 12, by + 12)
+			glVertex2f(bx + w + 12, by + 12)
+			glVertex2f(bx + w + 12, by + h + 12)
+			glVertex2f(bx + 12, by + h + 12)
+			glEnd()
+			glColor4f(0.96, 0.58, 0.2, 0.98)
+			glBegin(GL_QUADS)
+			glVertex2f(bx, by)
+			glVertex2f(bx + w, by)
+			glVertex2f(bx + w, by + h)
+			glVertex2f(bx, by + h)
+			glEnd()
+			glLineWidth(3)
+			glColor3f(1, 1, 1)
+			glBegin(GL_LINE_LOOP)
+			glVertex2f(bx, by)
+			glVertex2f(bx + w, by)
+			glVertex2f(bx + w, by + h)
+			glVertex2f(bx, by + h)
+			glEnd()
+			glLineWidth(1)
+			title = "NIVEL COMPLETADO!!"
+			glColor3f(1, 1, 1)
+			render_text(cx - len(title)*7, by + h - 200, title)
+			glColor3f(1, 1, 1)
+			render_text(bx + 40, by + h - 120, f"PUNTAJE: {'---'}")
+			render_text(bx + 40, by + h - 160, f"CLASIFICACION: {'---'}")
+			
+			btn_w = 200
+			btn_h = 50
+			left_btn_x = int(bx + w*0.25 - btn_w/2)
+			right_btn_x = int(bx + w*0.75 - btn_w/2)
+			btn_y = int(by + h - 80)
+			# Botón izquierdo - Menú principal (fondo oscuro)
+			glColor4f(0.12, 0.12, 0.12, 0.95)
+			glBegin(GL_QUADS)
+			glVertex2f(left_btn_x, btn_y)
+			glVertex2f(left_btn_x + btn_w, btn_y)
+			glVertex2f(left_btn_x + btn_w, btn_y + btn_h)
+			glVertex2f(left_btn_x, btn_y + btn_h)
+			glEnd()
+			# Borde botón izquierdo
+			glLineWidth(2)
+			glColor3f(1, 1, 1)
+			glBegin(GL_LINE_LOOP)
+			glVertex2f(left_btn_x, btn_y)
+			glVertex2f(left_btn_x + btn_w, btn_y)
+			glVertex2f(left_btn_x + btn_w, btn_y + btn_h)
+			glVertex2f(left_btn_x, btn_y + btn_h)
+			glEnd()
+			glLineWidth(1)
+			# Texto centrado botón izquierdo
+			label_left = "MENÚ PRINCIPAL"
+			tx = left_btn_x + btn_w//2 - int(len(label_left) * 4)
+			ty = btn_y + btn_h//2 + 6
+			glColor3f(1, 1, 1)
+			render_text(tx - 20, ty, label_left)
+
+			if est.nivel_sel < 2:
+
+				# Botón derecho - Siguiente nivel (fondo oscuro)
+				glColor4f(0.12, 0.12, 0.12, 0.95)
+				glBegin(GL_QUADS)
+				glVertex2f(right_btn_x, btn_y)
+				glVertex2f(right_btn_x + btn_w, btn_y)
+				glVertex2f(right_btn_x + btn_w, btn_y + btn_h)
+				glVertex2f(right_btn_x, btn_y + btn_h)
+				glEnd()
+				# Borde botón derecho
+				glLineWidth(2)
+				glColor3f(1, 1, 1)
+				glBegin(GL_LINE_LOOP)
+				glVertex2f(right_btn_x, btn_y)
+				glVertex2f(right_btn_x + btn_w, btn_y)
+				glVertex2f(right_btn_x + btn_w, btn_y + btn_h)
+				glVertex2f(right_btn_x, btn_y + btn_h)
+				glEnd()
+				glLineWidth(1)
+				# Texto centrado botón derecho
+				label_right = "SIGUIENTE NIVEL"
+				tx2 = right_btn_x + btn_w//2 - int(len(label_right) * 4)
+				y2 = btn_y + btn_h//2 + 6
+				glColor3f(1, 1, 1)
+				render_text(tx2 - 20, y2, label_right)
 		glDisable(GL_BLEND)
 		glEnable(GL_DEPTH_TEST)
 		glEnable(GL_LIGHTING)
@@ -215,14 +296,13 @@ def main():
 
 	window = MainWindow()
 	window.init_gl()
-	est.audio = window.audio
+	# est.audio = window.audio
 
 	updt.set_input_handler(window.input_handler, window.escena)
 	updt.update(0)
 	glutDisplayFunc(window.display)
 	glutReshapeFunc(window.reshape)
 	glutKeyboardFunc(window.input_handler.keyboard)
-	# glutKeyboardUpFunc(window.input_handler.keyboard_up)
 	glutSpecialFunc(window.input_handler.special_keys)
 	glutMouseFunc(window.input_handler.mouse_click)
 	glutMotionFunc(window.input_handler.mouse_motion)

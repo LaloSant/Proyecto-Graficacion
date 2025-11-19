@@ -79,8 +79,8 @@ class Menu:
 
 		self.buttons_niveles = [
 			Button(-200,-50, 100, 40, "Tutorial", lambda: self._select_nivel(0)),
-			Button(0,-50, 120, 40, "3 Niveles", lambda: self._select_nivel(1)),
-			Button(200,-50, 100, 40, "4 Niveles", lambda: self._select_nivel(2)),
+			Button(0,-50, 120, 40, "3 Discos", lambda: self._select_nivel(1)),
+			Button(200,-50, 100, 40, "4 Discos", lambda: self._select_nivel(2)),
 			Button(-200, -230, 120, 40, "Volver", self._back_to_main)
 		]
 		

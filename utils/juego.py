@@ -10,9 +10,7 @@ def agarrar_disco():
 def poner_disco():
 	long = len(est.piramides[est.posicion_pers_sel])
 	if not posicion_valida():
-		print("Nao, nao")
 		return False
-	
 	disco = est.disco_agarrado
 	est.disco_agarrado = None
 	disco.posicion = [disco.posicion[0], est.posiciones_discos_y[long], 0]
@@ -28,55 +26,29 @@ def posicion_valida():
 	return not disco.tamanio > disco_peek.tamanio
 
 def verificar_victoria():
-	"""Verifica si la Torre de Hanoi está completa (todos los discos en la posición 1)"""
 	if len(est.discos) == 0:
 		return False
 	if len(est.piramides[1]) != len(est.discos):
 		return False
-	# Verificar que todos los discos estén en orden correcto
-	# El orden en la pila va de abajo (índice 0) a arriba (último índice).
-	# El disco más grande tiene tamanio == len(est.discos) y debe estar abajo.
 	for i in range(len(est.discos)):
 		expected = len(est.discos) - i
 		if est.piramides[1][i].tamanio != expected:
 			return False
 	return True
 
-
-class Nivel2():
+class Nivel1():
 	def __init__(self) -> None:
-		self.reiniciar()
+		pass
+		# self.reiniciar()
 	
 	def reiniciar(self):
+		est.audio.musica_on(1)
 		est.discos = [Disco(1)
 						,Disco(2)
 						,Disco(3)
 				]
-		est.piramides[-1].clear()
-		est.piramides[0].clear()
-		est.piramides[1].clear()
-		est.piramides[-1].append(est.discos[2])
-		est.piramides[-1].append(est.discos[1])
-		est.piramides[-1].append(est.discos[0])
-		est.discos[0].posicion = [-5, est.posiciones_discos_y[2], 0]
-		est.discos[1].posicion = [-5, est.posiciones_discos_y[1], 0]
-		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
-
-class Nivel1():
-	def __init__(self) -> None:
-		self.reiniciar()
-	
-	def reiniciar(self):
-		est.discos = [Disco(1)
-					,Disco(2)
-					,Disco(3)
-				]
-		est.posiciones_pers = {
-				-1: [0.0, 0, -2],
-				0: [0.0, 0, -2],
-				1: [0.0, 0, -2]
-			}
 		est.posicion_pers_sel = 0
+		est.rest_pos_pers()
 		est.total_movimientos_discos = 0
 		est.piramides[-1].clear()
 		est.piramides[0].clear()
@@ -88,15 +60,20 @@ class Nivel1():
 		est.discos[1].posicion = [-5, est.posiciones_discos_y[1], 0]
 		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
 
-class Nivel3():
+class Nivel2():
 	def __init__(self) -> None:
-		self.reiniciar()
+		pass
+		# self.reiniciar()
 	
 	def reiniciar(self):
+		est.audio.musica_on(2)
 		est.discos = [Disco(1)
-					,Disco(2)
-					,Disco(3)
+						,Disco(2)
+						,Disco(3)
 				]
+		est.posicion_pers_sel = 0
+		est.rest_pos_pers()
+		est.total_movimientos_discos = 0
 		est.piramides[-1].clear()
 		est.piramides[0].clear()
 		est.piramides[1].clear()
@@ -106,3 +83,31 @@ class Nivel3():
 		est.discos[0].posicion = [-5, est.posiciones_discos_y[2], 0]
 		est.discos[1].posicion = [-5, est.posiciones_discos_y[1], 0]
 		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
+
+
+class Nivel3():
+	def __init__(self) -> None:
+		pass
+		# self.reiniciar()
+	
+	def reiniciar(self):
+		est.audio.musica_on(3)
+		est.discos = [Disco(1)
+						,Disco(2)
+						,Disco(3)
+						,Disco(4)
+				]
+		est.posicion_pers_sel = 0
+		est.rest_pos_pers()
+		est.total_movimientos_discos = 0
+		est.piramides[-1].clear()
+		est.piramides[0].clear()
+		est.piramides[1].clear()
+		est.piramides[-1].append(est.discos[3])
+		est.piramides[-1].append(est.discos[2])
+		est.piramides[-1].append(est.discos[1])
+		est.piramides[-1].append(est.discos[0])
+		est.discos[0].posicion = [-5, est.posiciones_discos_y[3], 0]
+		est.discos[1].posicion = [-5, est.posiciones_discos_y[2], 0]
+		est.discos[2].posicion = [-5, est.posiciones_discos_y[1], 0]
+		est.discos[3].posicion = [-5, est.posiciones_discos_y[0], 0]
