@@ -87,9 +87,10 @@ class Kenny(Objeto):
 		glPushMatrix()
 		# glColor3f(1.0, 0, 0)
 		self.set_material_properties(self.rgb(255, 0, 0))
-		if est.estado_pers[0] == est.estados_pers[2]:
-			glRotatef(-pers_args.brazos,1,0,0) #Brazos
-		else:
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(-0.9, 0, 0)
+		else: 
 			glRotatef(pers_args.caminando, 1, 0, 0)
 		glTranslatef(1.2, -0.5 , 0)
 		glScalef(0.25, 0.8, 0.25)
@@ -99,7 +100,11 @@ class Kenny(Objeto):
 		glPushMatrix()
 		# glColor3f(1.01185, 0.8735, 0.7984)
 		self.set_material_properties(self.rgb(255, 222, 201))
-		glRotatef(pers_args.caminando, 1, 0, 0)
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(-0.9, 0, 0)
+		else: 
+			glRotatef(pers_args.caminando, 1, 0, 0)
 		glTranslatef(1.2, -1 , 0)
 		glutSolidCube(0.25)
 		glPopMatrix()
@@ -117,7 +122,11 @@ class Kenny(Objeto):
 		glPushMatrix()
 		# glColor3f(1.0, 0, 0)
 		self.set_material_properties(self.rgb(255, 0, 0))
-		glRotatef(-pers_args.caminando, 1, 0, 0)
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(-0.9, 0, 0)
+		else: 
+			glRotatef(-pers_args.caminando, 1, 0, 0)
 		glTranslatef(-0.3, -0.5, 0)
 		glScalef(0.25, 0.8, 0.25)
 		glutSolidCube(1)
@@ -126,7 +135,11 @@ class Kenny(Objeto):
 		glPushMatrix()
 		# glColor3f(1.01185, 0.8735, 0.7984)
 		self.set_material_properties(self.rgb(255, 222, 201))
-		glRotatef(-pers_args.caminando, 1, 0, 0)
+		if pers_args.brazos_arriba:
+			glRotatef(180, 0, 0, 1)
+			glTranslatef(-0.9, 0, 0)
+		else: 
+			glRotatef(-pers_args.caminando, 1, 0, 0)
 		glTranslatef(-0.3, -1, 0)
 		glutSolidCube(0.25)
 		glPopMatrix()
