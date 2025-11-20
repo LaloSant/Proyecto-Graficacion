@@ -33,9 +33,8 @@ class MainWindow:
 		self.kevin = Kevin()
 		self.kenny = Kenny()
 		self.piramides = [BasePiramide(-5), BasePiramide(0), BasePiramide(5)]
-		# self.audio = Audio()
 		est.audio = Audio()
-		self.niveles = [Nivel1(), Nivel2(), Nivel3()]
+		self.niveles:list[Nivel] = [Nivel1(), Nivel2(), Nivel3()]
 		self.escena = Escena()
 		self.menu = Menu(
 			on_jugar = self._on_jugar,
@@ -179,8 +178,9 @@ class MainWindow:
 			glColor3f(1, 1, 1)
 			render_text(cx - len(title)*7, by + h - 200, title)
 			glColor3f(1, 1, 1)
-			render_text(bx + 40, by + h - 120, f"PUNTAJE: {'---'}")
-			render_text(bx + 40, by + h - 160, f"CLASIFICACION: {'---'}")
+			puntaje = self.niveles[est.nivel_sel].movimientos_optimos / est.total_movimientos_discos * 100
+			render_text(bx + 40, by + h - 120, f"PUNTAJE: {puntaje:.2f}")
+			render_text(bx + 40, by + h - 160, f"CLASIFICACION: {self.niveles[est.nivel_sel].calcular_clasificacion(puntaje)}")
 			
 			btn_w = 200
 			btn_h = 50

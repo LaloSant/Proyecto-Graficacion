@@ -88,15 +88,13 @@ class InputHandler:
 			height = 600
 			gl_x = (x - width/2)
 			gl_y = -(y - height/2)
-			
 			if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
 				self.menu.handle_click(gl_x, gl_y)
 			glutPostRedisplay()
 			return
 
-		# Si el juego está completado, comprobar botones del cuadro central
 		if est.juego_completado and button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
-			# Usamos las mismas dimensiones de ventana que en el código principal
+			
 			width = 1000
 			height = 600
 			cx = width // 2
@@ -105,7 +103,7 @@ class InputHandler:
 			h = 240
 			bx = cx - w//2
 			by = cy - h//2
-			# Botones
+			
 			btn_w = 200
 			btn_h = 50
 			left_btn_x = int(bx + w*0.25 - btn_w/2)
@@ -116,6 +114,7 @@ class InputHandler:
 				# Volver al menú principal
 				self.menu.active = True
 				est.juego_completado = False
+				est.audio.musica_on(0)
 				glutPostRedisplay()
 				return
 			# Verificar click en Siguiente nivel

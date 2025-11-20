@@ -38,11 +38,29 @@ def verificar_victoria():
 			return False
 	return True
 
-class Nivel1():
+class Nivel():
 	def __init__(self) -> None:
-		pass
-		# self.reiniciar()
+		self.movimientos_optimos = 0
 	
+	def reiniciar(self):
+		pass
+
+	def calcular_clasificacion(self, result:float):
+		if result > 100:
+			return "HACKEEEERRR"
+		elif result > 90 and result <= 100:
+			return "PROFESIONAL"
+		elif result > 80 and result <= 90:
+			return "BUEN JUGADOR"
+		elif result > 70 and result <= 80:
+			return "APRENDIZ"
+		elif result <= 70:
+			return "PODEMOS MEJORAR"
+
+class Nivel1(Nivel):
+	def __init__(self) -> None:
+		self.movimientos_optimos = 11
+
 	def reiniciar(self):
 		est.audio.musica_on(1)
 		est.discos = [Disco(1)
@@ -62,10 +80,9 @@ class Nivel1():
 		est.discos[1].posicion = [-5, est.posiciones_discos_y[1], 0]
 		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
 
-class Nivel2():
+class Nivel2(Nivel):
 	def __init__(self) -> None:
-		pass
-		# self.reiniciar()
+		self.movimientos_optimos = 11
 	
 	def reiniciar(self):
 		est.audio.musica_on(2)
@@ -87,10 +104,9 @@ class Nivel2():
 		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
 
 
-class Nivel3():
+class Nivel3(Nivel):
 	def __init__(self) -> None:
-		pass
-		# self.reiniciar()
+		self.movimientos_optimos = 31
 	
 	def reiniciar(self):
 		est.audio.musica_on(3)
