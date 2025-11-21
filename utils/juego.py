@@ -1,3 +1,4 @@
+# utils/juego.py
 import utils.estado as est
 from source.objetos.disco import Disco
 

@@ -1,3 +1,4 @@
+# source/objetos/objeto.py
 from OpenGL.GL import *		# type: ignore
 
 class Objeto:

@@ -1,3 +1,4 @@
+# utils/estado.py
 from typing import Optional
 from utils.audio import Audio
 from source.objetos.disco import Disco

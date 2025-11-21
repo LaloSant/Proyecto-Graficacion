@@ -1,3 +1,4 @@
+# utils/update.py
 import math
 from OpenGL.GLUT import *	#type:ignore
 
@@ -31,7 +32,7 @@ def bounding_sphere():
 		pers_args.cambiar_estado(0)
 	else:
 		_escena.set_escenario(0)
-		pers_args.cambiar_estado(1)
+		pers_args.cambiar_estado(1)	
 
 def animacion():
 	if est.estado_pers[0] == est.estados_pers[1]: #Caminando

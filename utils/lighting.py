@@ -1,3 +1,4 @@
+# utils/lighting.py
 from OpenGL.GL import *	# type: ignore
 
 class LightingManager:

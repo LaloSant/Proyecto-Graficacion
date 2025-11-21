@@ -1,210 +1,239 @@
-from OpenGL.GL import * 	# type: ignore
-from OpenGL.GLU import *	# type: ignore
-from OpenGL.GLUT import *	# type: ignore
+# source/objetos/kenny.py
+from OpenGL.GL import *     # type: ignore
+from OpenGL.GLU import *    # type: ignore
+from OpenGL.GLUT import *   # type: ignore
 import math
 from source.objetos.objeto import Objeto
 import utils.estado as est
 import source.objetos.pers_args as pers_args
 
 class Kenny(Objeto):
-	def draw_hat(self): 
-		glPushMatrix()
-		glTranslatef(0.45, 1.2, 0)
-		glScalef(1.25, 0.4, 1.1) 
-		# glColor3f(1, 0, 0)
-		self.set_material_properties(self.rgb(255, 0, 0))
-		glutSolidCube(1.0)
-		glPopMatrix()
 
-		glPushMatrix()
-		glTranslatef(0.45, 1, 0.5)
-		glScalef(1.25, 0.05, 1) 
-		# glColor3f(1, 0, 0)
-		self.set_material_properties(self.rgb(255, 0, 0))
-		glutSolidCube(1.0)
-		glPopMatrix()
+    def apagado(self, r, g, b):
+        gris = (r + g + b) // 30
+        r2 = int(r * 0.4 + gris * 0.6)
+        g2 = int(g * 0.4 + gris * 0.6)
+        b2 = int(b * 0.4 + gris * 0.6)
+        return self.rgb(r2, g2, b2)
 
-	def draw_head(self):
-		glPushMatrix()
-		glTranslatef(0.45, 0.65, 0)
-		# glColor3f(1.01185, 0.8735, 0.7984)
-		self.set_material_properties(self.rgb(255, 222, 201))
-		glutSolidCube(1.0)
-		glPopMatrix()
+    def draw_hat(self, selected): 
+        glPushMatrix()
+        glTranslatef(0.45, 1.2, 0)
+        glScalef(1.25, 0.4, 1.1)
+        if selected:
+            self.set_material_properties(self.rgb(255, 0, 0))
+        else:
+            self.set_material_properties(self.apagado(255, 0, 0))
+        glutSolidCube(1.0)
+        glPopMatrix()
 
+        glPushMatrix()
+        glTranslatef(0.45, 1, 0.5)
+        glScalef(1.25, 0.05, 1)
+        if selected:
+            self.set_material_properties(self.rgb(255, 0, 0))
+        else:
+            self.set_material_properties(self.apagado(255, 0, 0))
+        glutSolidCube(1.0)
+        glPopMatrix()
 
-	def draw_eyes(self):
-		glPushMatrix()
-		glTranslatef(0.45, 0.65, 0)
+    def draw_head(self, selected):
+        glPushMatrix()
+        glTranslatef(0.45, 0.65, 0)
+        if selected:
+            self.set_material_properties(self.rgb(255, 222, 201))
+        else:
+            self.set_material_properties(self.apagado(255, 222, 201))
+        glutSolidCube(1.0)
+        glPopMatrix()
 
-		eye_x_offset = 0.15
-		eye_y_offset = 0.0 
-		eye_z_pos = 0.5 + 0.025
+    def draw_eyes(self, selected):
+        glPushMatrix()
+        glTranslatef(0.45, 0.65, 0)
 
-		active = False
-		scale_factor = 3.0 if active else 1.0
-		sx = 0.05 * scale_factor
-		sy = 0.25 * scale_factor
-		sz = 0.05 * scale_factor
+        eye_x_offset = 0.15
+        eye_y_offset = 0.0
+        eye_z_pos = 0.5 + 0.025
 
-		# glColor3f(0.0, 0.0, 0.0)
-		self.set_material_properties(self.rgb(0, 0, 0))
-		# Ojo izquierdo
-		glPushMatrix()
-		glTranslatef(-eye_x_offset, eye_y_offset, eye_z_pos)
-		glScalef(sx, sy, sz)
-		glutSolidCube(1.0)
-		glPopMatrix()
+        active = False
+        scale_factor = 3.0 if active else 1.0
+        sx = 0.05 * scale_factor
+        sy = 0.25 * scale_factor
+        sz = 0.05 * scale_factor
 
-		# Ojo derecho
-		glPushMatrix()
-		glTranslatef(eye_x_offset, eye_y_offset, eye_z_pos)
-		glScalef(sx, sy, sz)
-		glutSolidCube(1.0)
-		glPopMatrix()
-		glPopMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(0, 0, 0))
+        else:
+            self.set_material_properties(self.apagado(0, 0, 0))
 
-	def draw_body(self):
-		glPushMatrix()
-		glTranslatef(0.45, -0.56, 0)
-		glScalef(1.25, 1.5, 0.75) 
-		# glColor3f(0, 0, 1)
-		self.set_material_properties(self.rgb(0, 0, 255))
-		glutSolidCube(1.0)
-		glPopMatrix()
+        # Ojo izquierdo
+        glPushMatrix()
+        glTranslatef(-eye_x_offset, eye_y_offset, eye_z_pos)
+        glScalef(sx, sy, sz)
+        glutSolidCube(1.0)
+        glPopMatrix()
 
-	def draw_arms(self):
-		# Brazo derecho (originalmente a la derecha)
-		# manga
-		glPushMatrix()
-		# glColor3f(0, 0, 1.0)
-		self.set_material_properties(self.rgb(0, 0, 255))
-		glRotatef(pers_args.caminando, 1, 0, 0)
-		glTranslatef(1.2, 0, 0)
-		glutSolidCube(0.25)
-		glPopMatrix()
-		# brazo (segmento)
-		glPushMatrix()
-		# glColor3f(1.0, 0, 0)
-		self.set_material_properties(self.rgb(255, 0, 0))
-		if pers_args.brazos_arriba:
-			glRotatef(180, 0, 0, 1)
-			glTranslatef(-0.9, 0, 0)
-		else: 
-			glRotatef(pers_args.caminando, 1, 0, 0)
-		glTranslatef(1.2, -0.5 , 0)
-		glScalef(0.25, 0.8, 0.25)
-		glutSolidCube(1)
-		glPopMatrix()
-		# mano
-		glPushMatrix()
-		# glColor3f(1.01185, 0.8735, 0.7984)
-		self.set_material_properties(self.rgb(255, 222, 201))
-		if pers_args.brazos_arriba:
-			glRotatef(180, 0, 0, 1)
-			glTranslatef(-0.9, 0, 0)
-		else: 
-			glRotatef(pers_args.caminando, 1, 0, 0)
-		glTranslatef(1.2, -1 , 0)
-		glutSolidCube(0.25)
-		glPopMatrix()
+        # Ojo derecho
+        glPushMatrix()
+        glTranslatef(eye_x_offset, eye_y_offset, eye_z_pos)
+        glScalef(sx, sy, sz)
+        glutSolidCube(1.0)
+        glPopMatrix()
+        glPopMatrix()
 
-		# Brazo izquierdo
-		# manga
-		glPushMatrix()
-		# glColor3f(0, 0, 1.0)
-		self.set_material_properties(self.rgb(1, 0, 255))
-		glRotatef(-pers_args.caminando, 1, 0, 0)
-		glTranslatef(-0.3, 0, 0)
-		glutSolidCube(0.25)
-		glPopMatrix()
-		# brazo
-		glPushMatrix()
-		# glColor3f(1.0, 0, 0)
-		self.set_material_properties(self.rgb(255, 0, 0))
-		if pers_args.brazos_arriba:
-			glRotatef(180, 0, 0, 1)
-			glTranslatef(-0.9, 0, 0)
-		else: 
-			glRotatef(-pers_args.caminando, 1, 0, 0)
-		glTranslatef(-0.3, -0.5, 0)
-		glScalef(0.25, 0.8, 0.25)
-		glutSolidCube(1)
-		glPopMatrix()
-		# mano
-		glPushMatrix()
-		# glColor3f(1.01185, 0.8735, 0.7984)
-		self.set_material_properties(self.rgb(255, 222, 201))
-		if pers_args.brazos_arriba:
-			glRotatef(180, 0, 0, 1)
-			glTranslatef(-0.9, 0, 0)
-		else: 
-			glRotatef(-pers_args.caminando, 1, 0, 0)
-		glTranslatef(-0.3, -1, 0)
-		glutSolidCube(0.25)
-		glPopMatrix()
+    def draw_body(self, selected):
+        glPushMatrix()
+        glTranslatef(0.45, -0.56, 0)
+        glScalef(1.25, 1.5, 0.75)
+        if selected:
+            self.set_material_properties(self.rgb(0, 0, 255))
+        else:
+            self.set_material_properties(self.apagado(0, 0, 255))
+        glutSolidCube(1.0)
+        glPopMatrix()
 
-	def draw_legs(self):
+    def draw_arms(self, selected):
+        # Brazo derecho - manga
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(0, 0, 255))
+        else:
+            self.set_material_properties(self.apagado(0, 0, 255))
+        glRotatef(pers_args.caminando, 1, 0, 0)
+        glTranslatef(1.2, 0, 0)
+        glutSolidCube(0.25)
+        glPopMatrix()
 
+        # brazo
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(255, 0, 0))
+        else:
+            self.set_material_properties(self.apagado(255, 0, 0))
+        if pers_args.brazos_arriba:
+            glRotatef(180, 0, 0, 1)
+            glTranslatef(-0.9, 0, 0)
+        else:
+            glRotatef(pers_args.caminando, 1, 0, 0)
+        glTranslatef(1.2, -0.5 , 0)
+        glScalef(0.25, 0.8, 0.25)
+        glutSolidCube(1)
+        glPopMatrix()
 
-		# Pierna izquierda (prisma rectangular)
-		glPushMatrix()
-		
-		# glColor3f(1.0, 1.0, 1.0)
-		self.set_material_properties(self.rgb(255, 255, 255))
-		glRotatef(pers_args.caminando, 1, 0, 0)
-		glTranslatef(0 , -1.59, 0)
-		glScalef(0.3, 0.5, 0.3)
-		glutSolidCube(1.0)
-		glPopMatrix()
+        # mano
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(255, 222, 201))
+        else:
+            self.set_material_properties(self.apagado(255, 222, 201))
+        if pers_args.brazos_arriba:
+            glRotatef(180, 0, 0, 1)
+            glTranslatef(-0.9, 0, 0)
+        else:
+            glRotatef(pers_args.caminando, 1, 0, 0)
+        glTranslatef(1.2, -1 , 0)
+        glutSolidCube(0.25)
+        glPopMatrix()
 
-		# Pierna derecha (prisma rectangular)
-		glPushMatrix()
-		# glColor3f(1.0, 1.0, 1.0)
-		self.set_material_properties(self.rgb(255, 255, 255))
-		glRotatef(-pers_args.caminando, 1, 0, 0)
-		glTranslatef(0.9  , -1.59, 0)
-		glScalef(0.3, 0.5, 0.3)
-		glutSolidCube(1.0)
-		glPopMatrix()
+        # Brazo izquierdo - manga
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(1, 0, 255))
+        else:
+            self.set_material_properties(self.apagado(1, 0, 255))
+        glRotatef(-pers_args.caminando, 1, 0, 0)
+        glTranslatef(-0.3, 0, 0)
+        glutSolidCube(0.25)
+        glPopMatrix()
 
-		# Pie izquierdo
-		glPushMatrix()
-		# glColor3f(0, 0, 0)
-		self.set_material_properties(self.rgb(0, 0, 0))
-		glRotatef(pers_args.caminando, 1, 0, 0)
-		glTranslatef(0  , -2, 0)
-		glRotatef(-90, 1, 0, 0)
-		glutSolidCube(0.3)
-		glPopMatrix()
+        # brazo
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(255, 0, 0))
+        else:
+            self.set_material_properties(self.apagado(255, 0, 0))
+        if pers_args.brazos_arriba:
+            glRotatef(180, 0, 0, 1)
+            glTranslatef(-0.9, 0, 0)
+        else:
+            glRotatef(-pers_args.caminando, 1, 0, 0)
+        glTranslatef(-0.3, -0.5, 0)
+        glScalef(0.25, 0.8, 0.25)
+        glutSolidCube(1)
+        glPopMatrix()
 
-		# Pie derecho
-		glPushMatrix()
-		# glColor3f(0, 0, 0)
-		self.set_material_properties(self.rgb(0, 0, 0))
-		glRotatef(-pers_args.caminando, 1, 0, 0)
-		glTranslatef(0.9, -2, 0)
-		glRotatef(-90, 1, 0, 0)
-		glutSolidCube(0.3)
-		glPopMatrix()
+        # mano
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(255, 222, 201))
+        else:
+            self.set_material_properties(self.apagado(255, 222, 201))
+        if pers_args.brazos_arriba:
+            glRotatef(180, 0, 0, 1)
+            glTranslatef(-0.9, 0, 0)
+        else:
+            glRotatef(-pers_args.caminando, 1, 0, 0)
+        glTranslatef(-0.3, -1, 0)
+        glutSolidCube(0.25)
+        glPopMatrix()
 
-	def draw(self):
-		glPushMatrix()
-		glScalef(0.9, 0.9, 0.9)
-		""" if state.reaction_type == "jump":
-			y_offset = math.sin(math.pi * state.reaction_timer / state.reaction_duration) * 0.8
-			glTranslatef(0, y_offset, 0)
-		elif state.reaction_type == "spin":
-			angle = 360 * (state.reaction_timer / state.reaction_duration)
-			glRotatef(angle, 0, 1, 0)
-		elif state.reaction_type == "shake":
-			x_offset = math.sin(state.reaction_timer * 0.5 * math.pi) * 0.2
-			glTranslatef(x_offset, 0, 0) """
-		glTranslatef(-0.5, 0, 0)
-		self.draw_body()
-		self.draw_hat()
-		self.draw_head()
-		self.draw_eyes()
-		self.draw_arms()
-		self.draw_legs()
-		glPopMatrix()
+    def draw_legs(self, selected):
+        # Pierna izquierda
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(255, 255, 255))
+        else:
+            self.set_material_properties(self.apagado(255, 255, 255))
+        glRotatef(pers_args.caminando, 1, 0, 0)
+        glTranslatef(0 , -1.59, 0)
+        glScalef(0.3, 0.5, 0.3)
+        glutSolidCube(1.0)
+        glPopMatrix()
+
+        # Pierna derecha
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(255, 255, 255))
+        else:
+            self.set_material_properties(self.apagado(255, 255, 255))
+        glRotatef(-pers_args.caminando, 1, 0, 0)
+        glTranslatef(0.9  , -1.59, 0)
+        glScalef(0.3, 0.5, 0.3)
+        glutSolidCube(1.0)
+        glPopMatrix()
+
+        # Pie izquierdo
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(0, 0, 0))
+        else:
+            self.set_material_properties(self.apagado(0, 0, 0))
+        glRotatef(pers_args.caminando, 1, 0, 0)
+        glTranslatef(0  , -2, 0)
+        glRotatef(-90, 1, 0, 0)
+        glutSolidCube(0.3)
+        glPopMatrix()
+
+        # Pie derecho
+        glPushMatrix()
+        if selected:
+            self.set_material_properties(self.rgb(0, 0, 0))
+        else:
+            self.set_material_properties(self.apagado(0, 0, 0))
+        glRotatef(-pers_args.caminando, 1, 0, 0)
+        glTranslatef(0.9, -2, 0)
+        glRotatef(-90, 1, 0, 0)
+        glutSolidCube(0.3)
+        glPopMatrix()
+
+    def draw(self, selected=False):
+        glPushMatrix()
+        glScalef(0.9, 0.9, 0.9)
+        glTranslatef(-0.5, 0, 0)
+        self.draw_body(selected)
+        self.draw_hat(selected)
+        self.draw_head(selected)
+        self.draw_eyes(selected)
+        self.draw_arms(selected)
+        self.draw_legs(selected)
+        glPopMatrix()

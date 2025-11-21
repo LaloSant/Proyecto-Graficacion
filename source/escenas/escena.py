@@ -1,3 +1,4 @@
+# source/escenas/escena.py
 from OpenGL.GL import * # type: ignore
 import utils.estado as est
 import utils.texturas as text

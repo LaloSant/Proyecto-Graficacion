@@ -1,3 +1,4 @@
+# source/escenas/menu.py
 import math
 from OpenGL.GL import *  # type: ignore
 from OpenGL.GLUT import *  # type: ignore
@@ -104,7 +105,7 @@ class Menu:
 
 	def _select_personaje(self, est_personaje):
 		self.selected_personaje = est_personaje
-		self.state = est.estados_juego[0]
+		#self.state = est.estados_juego[0]
 		est.personaje_sel = est_personaje
 	
 	def _select_nivel(self, nivel):
@@ -236,7 +237,7 @@ class Menu:
 			else:
 				glScalef(0.8, 0.8, 0.8)
 				glClearColor(0.0, 0.0, 0.0, 1.0)
-			modelo.draw()
+			modelo.draw(selected=es_seleccionado)
 			glPopMatrix()
 			glDisable(GL_DEPTH_TEST)
 			glDisable(GL_LIGHTING)

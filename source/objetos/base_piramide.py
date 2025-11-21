@@ -1,3 +1,4 @@
+# source/objetos/base_piramide.py
 from OpenGL.GL import *		# type: ignore
 from OpenGL.GLUT import *	# type: ignore
 from OpenGL.GLU import *	# type: ignore

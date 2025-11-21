@@ -1,3 +1,4 @@
+# utils/texturas.py
 from OpenGL.GL import *	# type: ignore
 from PIL import Image
 

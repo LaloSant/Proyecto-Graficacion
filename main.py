@@ -1,8 +1,8 @@
+# main.py
 from OpenGL.GL import *		# type: ignore
 from OpenGL.GLUT import *	# type: ignore
 from OpenGL.GLU import *	# type: ignore
 import math
-
 from utils.lighting import LightingManager
 from utils.input_handler import InputHandler
 from utils.texturas import load_texture
@@ -90,11 +90,11 @@ class MainWindow:
 			x, y, z = est.posiciones_pers[est.posicion_pers_sel]
 			glTranslatef(x, y, z)
 			if est.personaje_sel == est.personajes[0]:
-				self.kevin.draw()
+				self.kevin.draw(selected=True)
 			elif est.personaje_sel == est.personajes[1]:
-				self.don_corru.draw()
+				self.don_corru.draw(selected=True)
 			elif est.personaje_sel == est.personajes[2]:
-				self.kenny.draw()
+				self.kenny.draw(selected=True)
 			glPopMatrix()
 			self.dibuja_contador_movimientos()
 
