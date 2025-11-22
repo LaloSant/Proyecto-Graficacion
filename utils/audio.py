@@ -14,6 +14,7 @@ class Audio():
 			,self.load("resources/audio/nivel_3.mp3")
 			,self.load("resources/audio/win.mp3")
 			,self.load("resources/audio/click.mp3")
+			,self.load("resources/audio/game_over.mp3")
 		]
 		self.musica_on(self.cancion_act)
 	
@@ -39,9 +40,11 @@ class Audio():
 		self.cancion_act = cancion
 		sonido = self.sonidos[cancion]
 		sonido.set_volume(0.7)
-		if cancion == 4:
-			self.canal_audio_musica.play(sonido, loops=0)   
+		if cancion == 4 or cancion == 6:
+			
+			self.canal_audio_musica.play(sonido, loops=0)
 		else:
+			
 			self.canal_audio_musica.play(sonido, loops=-1) 
 
 

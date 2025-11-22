@@ -118,7 +118,7 @@ class MainWindow:
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		box_x, box_y = 20, 80
-		box_height = 100
+		box_height = 120
 		box_width = 300
 		glColor4f(0, 0, 0, 0.7)
 		glBegin(GL_QUADS)
@@ -141,9 +141,14 @@ class MainWindow:
 		text_y = box_y + 30
 		glColor3f(1, 1, 1)
 		render_text(box_x + 10, text_y - 5, f"Total de Movimientos: {est.total_movimientos_discos}")
-		render_text(box_x + 10, text_y + 20, "Controles: ")
-		render_text(box_x + 30, text_y + 40, "a / d : Mover personaje")
-		render_text(box_x + 30, text_y + 60, "b : Agarrar o dejar disco")
+		
+		if est.tiempo_limite > 0:
+			tiempo_texto = f"Tiempo: {int(est.tiempo_limite)}s"
+			glColor3f(1, 1, 1) if est.tiempo_limite > 10 else glColor3f(1, 0, 0)  
+			render_text(box_x + 10, text_y + 15, tiempo_texto)
+		render_text(box_x + 10, text_y + 35, "Controles: ")
+		render_text(box_x + 30, text_y + 55, "a / d : Mover personaje")
+		render_text(box_x + 30, text_y + 75, "b : Agarrar o dejar disco")
 		if est.juego_completado:
 			text_y -= 25
 			cx = self.width // 2
@@ -239,6 +244,73 @@ class MainWindow:
 				y2 = btn_y + btn_h//2 + 6
 				glColor3f(1, 1, 1)
 				render_text(tx2 - 20, y2, label_right)
+		
+		
+		if est.game_over:
+			cx = self.width // 2
+			cy = self.height // 2
+			w = 520
+			h = 240
+			bx = cx - w//2
+			by = cy - h//2
+			glColor4f(0, 0, 0, 0.5)
+			glBegin(GL_QUADS)
+			glVertex2f(bx + 12, by + 12)
+			glVertex2f(bx + w + 12, by + 12)
+			glVertex2f(bx + w + 12, by + h + 12)
+			glVertex2f(bx + 12, by + h + 12)
+			glEnd()
+			glColor4f(0.8, 0.2, 0.2, 0.98)  # Rojo para game over
+			glBegin(GL_QUADS)
+			glVertex2f(bx, by)
+			glVertex2f(bx + w, by)
+			glVertex2f(bx + w, by + h)
+			glVertex2f(bx, by + h)
+			glEnd()
+			glLineWidth(3)
+			glColor3f(1, 1, 1)
+			glBegin(GL_LINE_LOOP)
+			glVertex2f(bx, by)
+			glVertex2f(bx + w, by)
+			glVertex2f(bx + w, by + h)
+			glVertex2f(bx, by + h)
+			glEnd()
+			glLineWidth(1)
+			title = "¡TIEMPO AGOTADO!"
+			glColor3f(1, 1, 1)
+			render_text(cx - len(title)*7, by + h - 200, title)
+			glColor3f(1, 1, 1)
+			render_text(bx + 40, by + h - 120, f"MOVIMIENTOS: {est.total_movimientos_discos}")
+			render_text(bx + 40, by + h - 160, "PRESIONA ENTER PARA REINTENTAR")
+			
+			btn_w = 200
+			btn_h = 50
+			menu_btn_x = int(cx - btn_w/2)
+			btn_y = int(by + h - 80)
+			# Botón - Menú principal
+			glColor4f(0.12, 0.12, 0.12, 0.95)
+			glBegin(GL_QUADS)
+			glVertex2f(menu_btn_x, btn_y)
+			glVertex2f(menu_btn_x + btn_w, btn_y)
+			glVertex2f(menu_btn_x + btn_w, btn_y + btn_h)
+			glVertex2f(menu_btn_x, btn_y + btn_h)
+			glEnd()
+			# Borde botón
+			glLineWidth(2)
+			glColor3f(1, 1, 1)
+			glBegin(GL_LINE_LOOP)
+			glVertex2f(menu_btn_x, btn_y)
+			glVertex2f(menu_btn_x + btn_w, btn_y)
+			glVertex2f(menu_btn_x + btn_w, btn_y + btn_h)
+			glVertex2f(menu_btn_x, btn_y + btn_h)
+			glEnd()
+			glLineWidth(1)
+			# Texto centrado botón
+			label = "MENÚ PRINCIPAL"
+			tx = menu_btn_x + btn_w//2 - int(len(label) * 4)
+			ty = btn_y + btn_h//2 + 6
+			glColor3f(1, 1, 1)
+			render_text(tx - 20, ty, label)
 		glDisable(GL_BLEND)
 		glEnable(GL_DEPTH_TEST)
 		glEnable(GL_LIGHTING)

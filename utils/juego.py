@@ -39,9 +39,23 @@ def verificar_victoria():
 			return False
 	return True
 
+def cuenta_atras(nivel):
+	tiempo = est.tiempo_limite[nivel]
+	for i in range(tiempo):
+		est.tiempo_limite[nivel] -= 1
+
+def game_over_check(nivel):
+	total_time = est.tiempo_limite[nivel]
+	if total_time <= 0:
+		est.game_over = True
+		est.audio.musica_on(6) 
+		return True
+	return False
+
 class Nivel():
 	def __init__(self) -> None:
 		self.movimientos_optimos = 0
+		
 	
 	def reiniciar(self):
 		pass
@@ -57,6 +71,8 @@ class Nivel():
 			return "APRENDIZ"
 		elif result <= 70:
 			return "PODEMOS MEJORAR"
+	
+	
 
 class Nivel1(Nivel):
 	def __init__(self) -> None:
@@ -65,12 +81,15 @@ class Nivel1(Nivel):
 	def reiniciar(self):
 		est.audio.musica_on(1)
 		est.discos = [Disco(1)
-						,Disco(2)
-						,Disco(3)
+					,Disco(2)
+					,Disco(3)
 				]
 		est.posicion_pers_sel = 0
 		est.rest_pos_pers()
 		est.total_movimientos_discos = 0
+		est.tiempo_limite = 0 
+		est.juego_completado = False
+		est.game_over = False
 		est.piramides[-1].clear()
 		est.piramides[0].clear()
 		est.piramides[1].clear()
@@ -83,17 +102,20 @@ class Nivel1(Nivel):
 
 class Nivel2(Nivel):
 	def __init__(self) -> None:
-		self.movimientos_optimos = 11
+		self.movimientos_optimos = 7
 	
 	def reiniciar(self):
 		est.audio.musica_on(2)
 		est.discos = [Disco(1)
-						,Disco(2)
-						,Disco(3)
+					,Disco(2)
+					,Disco(3)
 				]
 		est.posicion_pers_sel = 0
 		est.rest_pos_pers()
 		est.total_movimientos_discos = 0
+		est.tiempo_limite = 30
+		est.juego_completado = False
+		est.game_over = False
 		est.piramides[-1].clear()
 		est.piramides[0].clear()
 		est.piramides[1].clear()
@@ -104,10 +126,9 @@ class Nivel2(Nivel):
 		est.discos[1].posicion = [-5, est.posiciones_discos_y[1], 0]
 		est.discos[2].posicion = [-5, est.posiciones_discos_y[0], 0]
 
-
 class Nivel3(Nivel):
 	def __init__(self) -> None:
-		self.movimientos_optimos = 31
+		self.movimientos_optimos = 15
 	
 	def reiniciar(self):
 		est.audio.musica_on(3)
@@ -119,6 +140,7 @@ class Nivel3(Nivel):
 		est.posicion_pers_sel = 0
 		est.rest_pos_pers()
 		est.total_movimientos_discos = 0
+		est.tiempo_limite = 60
 		est.piramides[-1].clear()
 		est.piramides[0].clear()
 		est.piramides[1].clear()

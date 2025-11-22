@@ -33,6 +33,22 @@ class InputHandler:
 			key = key.decode('utf-8').lower()
 		except Exception:
 			print("", end="")
+		
+		# Permitir cerrar overlay de victoria con Enter
+		if key in ('\r', '\n'):
+			if est.juego_completado:
+				est.juego_completado = False
+				glutPostRedisplay()
+				return
+			elif est.game_over:
+				# Reintentar nivel
+				est.game_over = False
+				from utils.juego import Nivel1, Nivel2, Nivel3
+				niveles = [Nivel1(), Nivel2(), Nivel3()]
+				niveles[est.nivel_sel].reiniciar()
+				glutPostRedisplay()
+				return
+		
 		self.keys_pressed.add(key)
 
 		if self.menu.active and self.menu.state == est.estados_juego[1]:
@@ -125,17 +141,17 @@ class InputHandler:
 			left_btn_x = int(bx + w*0.25 - btn_w/2)
 			right_btn_x = int(bx + w*0.75 - btn_w/2)
 			btn_y = int(by + h - 80)
-			# Verificar click en Menu principal
+			
 			if left_btn_x <= x <= left_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
-				# Volver al menú principal
+				
 				self.menu.active = True
 				est.juego_completado = False
 				est.audio.musica_on(0)
 				glutPostRedisplay()
 				return
-			# Verificar click en Siguiente nivel
+			
 			if right_btn_x <= x <= right_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
-				# Avanzar al siguiente nivel (si existe) y reiniciar
+				
 				import utils.juego as game
 				next_lvl = min(est.nivel_sel + 1, 2)
 				if next_lvl == 0:
@@ -150,6 +166,31 @@ class InputHandler:
 				est.nivel_sel = next_lvl
 				est.total_movimientos_discos = 0
 				est.juego_completado = False
+				glutPostRedisplay()
+				return
+
+		if est.game_over and button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+			width = 1000
+			height = 600
+			cx = width // 2
+			cy = height // 2
+			w = 520
+			h = 240
+			bx = cx - w//2
+			by = cy - h//2
+			
+			btn_w = 200
+			btn_h = 50
+			menu_btn_x = int(cx - btn_w/2)
+			btn_y = int(by + h - 80)
+			
+			# Verificar click en Menú principal
+			if menu_btn_x <= x <= menu_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
+				# Volver al menú principal
+				self.menu.active = True
+				est.game_over = False
+				est.juego_completado = False
+				est.audio.musica_on(0)
 				glutPostRedisplay()
 				return
 

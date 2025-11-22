@@ -73,8 +73,16 @@ def disco_agarrado():
 	if pers_args.brazos_arriba and est.disco_agarrado:
 		est.disco_agarrado.posicion = [est.posiciones_pers[est.posicion_pers_sel][0], est.posiciones_pers[est.posicion_pers_sel][1] + 1.7, est.posiciones_pers[est.posicion_pers_sel][2]]
 
+def actualizar_tiempo():
+	if est.tiempo_limite > 0 and not est.juego_completado:
+		est.tiempo_limite -= 0.016  
+		if est.tiempo_limite <= 0:
+			est.tiempo_limite = 0
+			est.game_over = True
+
 def update(value):
 	disco_agarrado()
 	animacion()
+	actualizar_tiempo()
 	glutPostRedisplay()
 	glutTimerFunc(16, update, 0)
