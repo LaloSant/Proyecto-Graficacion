@@ -34,6 +34,13 @@ class InputHandler:
 		except Exception:
 			print("", end="")
 		self.keys_pressed.add(key)
+
+		if self.menu.active and self.menu.state == est.estados_juego[1]:
+			if key == 'a':
+				self._move_personaje(-1)
+			elif key == 'd':
+				self._move_personaje(1)
+
 		if key == 'q':
 			glutLeaveMainLoop()
 		if key == 'p' and not self.menu.active:
@@ -73,11 +80,19 @@ class InputHandler:
 						est.total_movimientos_discos += 1
 						if game.verificar_victoria():
 							est.juego_completado = True
-							est.audio.musica_on(4)
+							est.audio.musica_on(4) 
 						pers_args.brazos_arriba = not pers_args.brazos_arriba
 					
 		glutPostRedisplay()
 	
+	def _move_personaje(self, direction):
+		personajes = est.personajes
+		idx = personajes.index(est.personaje_sel)
+		new_idx = (idx + direction) % len(personajes)  # ciclar
+		est.personaje_sel = personajes[new_idx]
+		self.menu.selected_personaje = est.personaje_sel
+
+
 	def keyboard_up(self, key, x, y):
 		key = key.decode('utf-8').lower()
 		self.keys_pressed.discard(key)

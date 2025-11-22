@@ -42,7 +42,8 @@ class MainWindow:
 		
 		self.game_state = est.estados_juego[0]  # ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 		self.input_handler = InputHandler(self.lighting_manager, self.menu, self.game_state)
-		self.logo_tex = load_texture("resources/imgs/LogoCC.png")
+		self.logo_tex = load_texture("resources/imgs/Fondo.png")
+		self.titulo = load_texture("resources/imgs/Titulo.png")
 
 	def _on_jugar(self):
 		self.game_state = est.estados_juego[1]
@@ -269,9 +270,9 @@ class MainWindow:
 		
 			glEnable(GL_TEXTURE_2D)
 			glBindTexture(GL_TEXTURE_2D, self.logo_tex)
-			logo_w, logo_h = 256 * 1.5, 128 * 1.5
+			logo_w, logo_h = 256 * 5.5, 128 * 5.5	
 			x = (self.width - logo_w) // 2
-			y = 30 
+			y = -50
 			glColor4f(1, 1, 1, 1)
 			glBegin(GL_QUADS)
 			glTexCoord2f(0, 1); glVertex2f(x, y)
@@ -281,6 +282,28 @@ class MainWindow:
 			glEnd()
 			glBindTexture(GL_TEXTURE_2D, 0)
 			glDisable(GL_TEXTURE_2D)
+
+			glEnable(GL_BLEND)
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			glEnable(GL_TEXTURE_2D)
+			glBindTexture(GL_TEXTURE_2D, self.titulo)
+			titulo_w = 600
+			titulo_h = 300
+			titulo_x = (self.width - titulo_w) // 2
+			titulo_y = -50  
+
+			glColor4f(1, 1, 1, 1)
+			glBegin(GL_QUADS)
+			glTexCoord2f(0, 1); glVertex2f(titulo_x, titulo_y)
+			glTexCoord2f(1, 1); glVertex2f(titulo_x + titulo_w, titulo_y)
+			glTexCoord2f(1, 0); glVertex2f(titulo_x + titulo_w, titulo_y + titulo_h)
+			glTexCoord2f(0, 0); glVertex2f(titulo_x, titulo_y + titulo_h)
+			glEnd()
+
+			glBindTexture(GL_TEXTURE_2D, 0)
+			glDisable(GL_TEXTURE_2D)
+			glDisable(GL_BLEND)
+
 			glEnable(GL_DEPTH_TEST)
 			glEnable(GL_LIGHTING)
 			glPopMatrix()

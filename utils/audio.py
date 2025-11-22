@@ -38,8 +38,12 @@ class Audio():
 	def musica_on(self, cancion:int):
 		self.cancion_act = cancion
 		sonido = self.sonidos[cancion]
-		sonido.set_volume(0.7) # type: ignore
-		self.canal_audio_musica.play(sonido, loops=-1) # type: ignore
+		sonido.set_volume(0.7)
+		if cancion == 4:
+			self.canal_audio_musica.play(sonido, loops=0)   
+		else:
+			self.canal_audio_musica.play(sonido, loops=-1) 
+
 
 	def musica_off(self):
 		self.canal_audio_musica.stop()
