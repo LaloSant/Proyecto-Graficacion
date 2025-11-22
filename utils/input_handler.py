@@ -43,6 +43,7 @@ class InputHandler:
 			elif est.game_over:
 				# Reintentar nivel
 				est.game_over = False
+				pers_args.brazos_arriba =False
 				from utils.juego import Nivel1, Nivel2, Nivel3
 				niveles = [Nivel1(), Nivel2(), Nivel3()]
 				niveles[est.nivel_sel].reiniciar()
@@ -170,6 +171,7 @@ class InputHandler:
 				return
 
 		if est.game_over and button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+			pers_args.brazos_arriba =False
 			width = 1000
 			height = 600
 			cx = width // 2

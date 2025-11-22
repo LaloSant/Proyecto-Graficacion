@@ -39,18 +39,7 @@ def verificar_victoria():
 			return False
 	return True
 
-def cuenta_atras(nivel):
-	tiempo = est.tiempo_limite[nivel]
-	for i in range(tiempo):
-		est.tiempo_limite[nivel] -= 1
 
-def game_over_check(nivel):
-	total_time = est.tiempo_limite[nivel]
-	if total_time <= 0:
-		est.game_over = True
-		est.audio.musica_on(6) 
-		return True
-	return False
 
 class Nivel():
 	def __init__(self) -> None:

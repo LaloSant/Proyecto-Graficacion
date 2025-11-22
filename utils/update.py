@@ -79,6 +79,7 @@ def actualizar_tiempo():
 		if est.tiempo_limite <= 0:
 			est.tiempo_limite = 0
 			est.game_over = True
+			est.audio.musica_on(6)
 
 def update(value):
 	disco_agarrado()
