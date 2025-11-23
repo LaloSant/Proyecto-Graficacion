@@ -65,7 +65,7 @@ game_over = False
 estados_juego = ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 
 personajes = ["Kevin", "Don_corru", "Kenny"]
-personaje_sel = personajes[0]
+personaje_sel = personajes[1]
 
 niveles = {0:"Nivel_1", 1:"Nivel_2", 2:"Nivel_3"}
 nivel_sel = 0

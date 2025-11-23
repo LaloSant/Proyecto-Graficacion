@@ -1,0 +1,1 @@
+glDisable(GL_LIGHTING)

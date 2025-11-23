@@ -8,6 +8,9 @@ from source.objetos.kevin import Kevin
 from source.objetos.don_corru import DonCorru
 from source.objetos.kenny import Kenny
 import utils.estado as est
+import utils.texturas as text
+from utils.texturas import load_texture
+
 
 
 class Button:
@@ -56,6 +59,12 @@ class Button:
 
 class Menu:
 	def __init__(self, on_jugar=None, on_personaje=None, on_niveles=None, on_salir=None):
+
+		self.fondo_kevin = load_texture("resources/imgs/KevinFondo.png")
+		self.fondo_doncorru = load_texture("resources/imgs/DonCorruFondo.png")
+		self.fondo_kenny = load_texture("resources/imgs/KennyFondo.png")
+
+
 		self.active = True
 		self.state = est.estados_juego[0]  #["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 		
@@ -143,22 +152,30 @@ class Menu:
 	def draw(self, width, height):
 		if not self.active:
 			return
+
 		if self.state == est.estados_juego[1]:
+			fondo = self._get_fondo_actual()
+			if fondo:
+				self._draw_fondo_grande(fondo, width, height)
+
 			self._draw_personajes_3d(width, height)
-		
+
 		glMatrixMode(GL_PROJECTION)
 		glPushMatrix()
 		glLoadIdentity()
 		glOrtho(-width/2, width/2, -height/2, height/2, -1, 1)
+
 		glMatrixMode(GL_MODELVIEW)
 		glPushMatrix()
 		glLoadIdentity()
+
 		glDisable(GL_LIGHTING)
 		glDisable(GL_TEXTURE_2D)
 		glDisable(GL_DEPTH_TEST)
+
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-		glColor4f(0, 0, 0, 0.2)
+		glColor4f(0, 0, 0, 0.18)
 		glBegin(GL_QUADS)
 		glVertex2f(-width/2, -height/2)
 		glVertex2f(width/2, -height/2)
@@ -166,38 +183,39 @@ class Menu:
 		glVertex2f(-width/2, height/2)
 		glEnd()
 		glDisable(GL_BLEND)
-		glColor3f(1.0, 1.0, 1.0)
-		title = ""
+
 		if self.state == est.estados_juego[0]:
 			title = "MENU PRINCIPAL"
 		elif self.state == est.estados_juego[1]:
 			title = "SELECCIONAR PERSONAJE"
 		elif self.state == est.estados_juego[2]:
 			title = "SELECCIONAR NIVEL"
+		else:
+			title = ""
 
-		glRasterPos2f(-len(title) * 5 - 30, height/2 - 250)
+		glColor3f(1, 1, 1)
+		glRasterPos2f(-len(title)*5 - 30, height/2 - 250)
 		for char in title:
 			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
 
 		if self.state == est.estados_juego[0]:
-			for button in self.buttons_main:
-				button.draw_2d()
+			buttons = self.buttons_main
 		elif self.state == est.estados_juego[1]:
-			for button in self.buttons_personaje:
-				if button.label == "Volver":
-					button.draw_2d()
-				""" else:
-					button.draw_2d() """
+			buttons = [b for b in self.buttons_personaje if b.label == "Volver"]
 		elif self.state == est.estados_juego[2]:
-			for button in self.buttons_niveles:
-				button.draw_2d()
-		
-		glEnable(GL_DEPTH_TEST)
+			buttons = self.buttons_niveles
+		else:
+			buttons = []
+
+		for button in buttons:
+			button.draw_2d()
+
 		glPopMatrix()
 		glMatrixMode(GL_PROJECTION)
 		glPopMatrix()
 		glMatrixMode(GL_MODELVIEW)
 		glEnable(GL_LIGHTING)
+
 
 	def _draw_personajes_3d(self, width, height):
 		preview_size = 250
@@ -210,12 +228,12 @@ class Menu:
 		for pos_x, pos_y, modelo, personaje_name in positions:
 			viewport_x = int(width/2 + pos_x - preview_size/2)
 			viewport_y = int(height/2 - pos_y - preview_size/2)
+
 			glViewport(viewport_x, viewport_y, preview_size, preview_size)
 			glMatrixMode(GL_PROJECTION)
 			glPushMatrix()
 			glLoadIdentity()
 			gluPerspective(45, 1.0, 0.1, 100)
-			
 			glMatrixMode(GL_MODELVIEW)
 			glPushMatrix()
 			glLoadIdentity()
@@ -230,6 +248,7 @@ class Menu:
 			glEnable(GL_NORMALIZE)
 			glEnable(GL_LIGHTING)
 			glPushMatrix()
+			
 			es_seleccionado = est.personaje_sel == personaje_name
 			if es_seleccionado:
 				glRotatef(glutGet(GLUT_ELAPSED_TIME) / 20, 0, 1, 0)
@@ -248,3 +267,49 @@ class Menu:
 
 		glViewport(0, 0, width, height)
 		glClearColor(0.0, 0.0, 0.0, 1.0)
+	
+	def _get_fondo_actual(self):
+		if self.state != est.estados_juego[1]:
+			return None
+		if est.personaje_sel == "Kevin":
+			return self.fondo_kevin
+		if est.personaje_sel == "Don_corru":
+			return self.fondo_doncorru
+		if est.personaje_sel == "Kenny":
+			return self.fondo_kenny
+
+		return None
+
+	def _draw_fondo_grande(self, textura, width, height):
+		glMatrixMode(GL_PROJECTION)
+		glPushMatrix()
+		glLoadIdentity()
+		glOrtho(-width/2, width/2, -height/2, height/2, -1, 1)
+
+		glMatrixMode(GL_MODELVIEW)
+		glPushMatrix()
+		glLoadIdentity()
+
+		glDisable(GL_LIGHTING)
+		glDisable(GL_DEPTH_TEST)
+		glEnable(GL_TEXTURE_2D)
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+		glBindTexture(GL_TEXTURE_2D, textura)
+		glColor4f(1, 1, 1, 1)
+		glBegin(GL_QUADS)
+		glTexCoord2f(0, 0); glVertex2f(-width/2, -height/2)
+		glTexCoord2f(1, 0); glVertex2f(width/2, -height/2)
+		glTexCoord2f(1, 1); glVertex2f(width/2, height/2)
+		glTexCoord2f(0, 1); glVertex2f(-width/2, height/2)
+		glEnd()
+
+		glBindTexture(GL_TEXTURE_2D, 0)
+		glDisable(GL_TEXTURE_2D)
+		glDisable(GL_BLEND)
+
+		glPopMatrix()
+		glMatrixMode(GL_PROJECTION)
+		glPopMatrix()
+		glMatrixMode(GL_MODELVIEW)
