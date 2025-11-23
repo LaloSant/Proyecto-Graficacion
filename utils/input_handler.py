@@ -38,6 +38,9 @@ class InputHandler:
 		if key in ('\r', '\n'):
 			if est.juego_completado:
 				est.juego_completado = False
+				from utils.juego import Nivel1, Nivel2, Nivel3
+				niveles = [Nivel1(), Nivel2(), Nivel3()]
+				niveles[est.nivel_sel].reiniciar()
 				glutPostRedisplay()
 				return
 			elif est.game_over:
@@ -60,7 +63,7 @@ class InputHandler:
 
 		if key == 'q':
 			glutLeaveMainLoop()
-		if key == 'p' and not self.menu.active:
+		if key == 'p' and not self.menu.active and est.game_over == False:
 			pers_args.brazos_arriba = False
 			self.menu.active = True
 			self.estado_ventana = est.estados_juego[0]
@@ -73,17 +76,27 @@ class InputHandler:
 			if key == 'a':
 				if est.posicion_pers_sel <= -1 or est.caminando_pct != 0:
 					return
+				if est.juego_completado:
+					return
+				if est.game_over:
+					return
 				est.estado_pers[0] = est.estados_pers[1]
 				est.posicion_pers_sel -= 1
 				est.caminando_pct = -1
 			elif key == 'd':
 				if est.posicion_pers_sel >= 1 or est.caminando_pct != 0:
 					return
+				if est.juego_completado:
+					return
+				if est.game_over:
+					return
 				est.estado_pers[0] = est.estados_pers[1]
 				est.posicion_pers_sel += 1
 				est.caminando_pct = +1
 			elif key == 'b':
 				if est.juego_completado:
+					return
+				if est.game_over:
 					return
 				if not pers_args.brazos_arriba:
 					if game.agarrar_disco():

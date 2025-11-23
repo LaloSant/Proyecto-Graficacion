@@ -1,1 +1,0 @@
-glDisable(GL_LIGHTING)
