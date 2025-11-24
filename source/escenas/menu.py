@@ -111,14 +111,14 @@ class Menu:
 		self.on_niveles = on_niveles
 		self.on_salir = on_salir
 
-		boton_inicio = load_texture("resources/imgs/boton_jugar.png")
+		boton_inicio = load_texture("resources/imgs/boton_inicio.png")
 		boton_salir = load_texture("resources/imgs/boton_salir.png")
 		boton_volver = load_texture("resources/imgs/boton_volver.png")
-		boton_jugar = load_texture("resources/imgs/boton_jugar_.png")
+		boton_jugar = load_texture("resources/imgs/boton_jugar.png")
 		boton_niveles = load_texture("resources/imgs/boton_niveles.png")
 		
 		self.buttons_main = [
-			Button(0, 50, 172, 60, "", self._on_personaje, boton_inicio),
+			Button(0, 50, 200, 70, "", self._on_personaje, boton_inicio),
 			Button(400, -250, 162, 50, "", self._on_salir, boton_salir)
 		]
 
@@ -127,9 +127,9 @@ class Menu:
 			Button(0, -80, 200, 200, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
 			Button(200, -80, 200, 200, "Kenny", lambda: self._select_personaje(est.personajes[2])),
 
-			Button(400, -250, 162, 50, "", self._back_to_main, boton_volver),
-			Button(-150, -230, 172, 60, "", self._on_jugar, boton_jugar),
-			Button(150, -230, 172, 60, "", self._on_niveles, boton_niveles)
+			Button(400, -250, 210, 50, "", self._back_to_main, boton_volver),
+			Button(-150, -230, 180, 60, "", self._on_jugar, boton_jugar),
+			Button(150, -230, 180, 60, "", self._on_niveles, boton_niveles)
 		]
 
 		self.buttons_niveles = [
