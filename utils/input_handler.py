@@ -52,15 +52,65 @@ class InputHandler:
 				niveles[est.nivel_sel].reiniciar()
 				glutPostRedisplay()
 				return
-		
+			elif self.menu.active and self.menu.state == est.estados_juego[1]:
+				self.menu.active = False
+				from utils.juego import Nivel1, Nivel2, Nivel3
+				niveles = [Nivel1(), Nivel2(), Nivel3()]
+				niveles[est.nivel_sel].reiniciar()
+				glutPostRedisplay()
+				return
+			elif self.menu.active and self.menu.state == est.estados_juego[0]:
+				self.menu.state = est.estados_juego[1]
+				glutPostRedisplay()
+				return
 		self.keys_pressed.add(key)
 
+		if est.juego_completado:
+			if key == 'o' and est.nivel_sel < 2: 
+				next_lvl = min(est.nivel_sel + 1, 2)
+				if next_lvl == 0:
+					lvl = game.Nivel1()
+					lvl.reiniciar()
+				elif next_lvl == 1:
+					lvl = game.Nivel2()
+					lvl.reiniciar()
+				else:
+					lvl = game.Nivel3()
+					lvl.reiniciar()
+				est.nivel_sel = next_lvl
+				est.total_movimientos_discos = 0
+				est.juego_completado = False
+				glutPostRedisplay()
+				return
+
+				
 		if self.menu.active and self.menu.state == est.estados_juego[1]:
 			if key == 'a':
 				self._move_personaje(-1)
 			elif key == 'd':
 				self._move_personaje(1)
+			elif key == 'n':
+				self.menu.state = est.estados_juego[2]
 
+		if self.menu.active and self.menu.state == est.estados_juego[2]:
+			if key == '1': 
+				self.menu._select_nivel(0)
+			elif key == '2':
+				self.menu._select_nivel(1)
+			elif key == '3': 
+				self.menu._select_nivel(2)
+		
+		if key == '\x1b': 
+			if self.menu.active:
+				if self.menu.state == est.estados_juego[2]: 
+					self.menu.state = est.estados_juego[1] 
+				elif self.menu.state == est.estados_juego[1]:
+					self.menu.state = est.estados_juego[0] 
+				elif self.menu.state == est.estados_juego[0]:
+					glutLeaveMainLoop()
+
+		
+		
 		if key == 'q':
 			glutLeaveMainLoop()
 		if key == 'p' and not self.menu.active and est.game_over == False:
