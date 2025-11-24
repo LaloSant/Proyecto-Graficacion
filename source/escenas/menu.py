@@ -14,7 +14,8 @@ from utils.texturas import load_texture
 
 
 class Button:
-	def __init__(self, x, y, width, height, label, callback=None):
+	def __init__(self, x, y, width, height, label, callback=None, texture=None):
+
 		self.x = x
 		self.y = y
 		self.width = width
@@ -22,36 +23,73 @@ class Button:
 		self.label = label
 		self.callback = callback
 		self.hovered = False
+		self.texture = texture
 		self.color_normal = (0.3, 0.3, 0.3)
 		self.color_hover = (0.6, 0.6, 0.6)
 		self.color_text = (1.0, 1.0, 1.0)
+
+		self.px = 0
+		self.py = 0
 
 	def contains_point(self, mx, my):
 		return (self.x - self.width/2 <= mx <= self.x + self.width/2 and
 				self.y - self.height/2 <= my <= self.y + self.height/2)
 
 	def draw_2d(self):
-		color = self.color_hover if self.hovered else self.color_normal
-		glColor3f(*color)
+
+
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+		if self.texture:
+			glEnable(GL_TEXTURE_2D)
+			glBindTexture(GL_TEXTURE_2D, self.texture)
+			glColor3f(1, 1, 1)  # Color blanco para que NO se tinte
+		else:
+			color = self.color_hover if self.hovered else self.color_normal
+			glColor3f(*color)
+
+		# Dibujar botón
 		glBegin(GL_QUADS)
+		if self.texture:
+			glTexCoord2f(0, 0)
 		glVertex2f(self.x - self.width/2, self.y - self.height/2)
+
+		if self.texture:
+			glTexCoord2f(1, 0)
 		glVertex2f(self.x + self.width/2, self.y - self.height/2)
+
+		if self.texture:
+			glTexCoord2f(1, 1)
 		glVertex2f(self.x + self.width/2, self.y + self.height/2)
+
+		if self.texture:
+			glTexCoord2f(0, 1)
 		glVertex2f(self.x - self.width/2, self.y + self.height/2)
 		glEnd()
-		
-		glColor3f(1.0, 1.0, 1.0)
-		glBegin(GL_LINE_LOOP)
-		glVertex2f(self.x - self.width/2, self.y - self.height/2)
-		glVertex2f(self.x + self.width/2, self.y - self.height/2)
-		glVertex2f(self.x + self.width/2, self.y + self.height/2)
-		glVertex2f(self.x - self.width/2, self.y + self.height/2)
-		glEnd()
-		
+
+		# Desactivar textura
+		if self.texture:
+			glBindTexture(GL_TEXTURE_2D, 0)
+			glDisable(GL_TEXTURE_2D)
+
+		# Borde
+		# glColor3f(0,0,0)
+		# glBegin(GL_LINE_LOOP)
+		# glVertex2f(self.x - self.width/2, self.y - self.height/2)
+		# glVertex2f(self.x + self.width/2, self.y - self.height/2)
+		# glVertex2f(self.x + self.width/2, self.y + self.height/2)
+		# glVertex2f(self.x - self.width/2, self.y + self.height/2)
+		# glEnd()
+
+		glDisable(GL_BLEND)
+
+		# Texto
 		glColor3f(*self.color_text)
-		glRasterPos2f(self.x - len(self.label) * 5, self.y - 5)
+		glRasterPos2f(self.x - len(self.label)*5, self.y - 5)
 		for char in self.label:
 			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
+
 
 	def click(self):
 		if self.callback:
@@ -63,7 +101,7 @@ class Menu:
 		self.fondo_kevin = load_texture("resources/imgs/KevinFondo.png")
 		self.fondo_doncorru = load_texture("resources/imgs/DonCorruFondo.png")
 		self.fondo_kenny = load_texture("resources/imgs/KennyFondo.png")
-
+		self.seleccionar_personaje = load_texture("resources/imgs/seleccion_personajes.png")
 
 		self.active = True
 		self.state = est.estados_juego[0]  #["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
@@ -72,26 +110,33 @@ class Menu:
 		self.on_personaje = on_personaje
 		self.on_niveles = on_niveles
 		self.on_salir = on_salir
+
+		boton_inicio = load_texture("resources/imgs/boton_jugar.png")
+		boton_salir = load_texture("resources/imgs/boton_salir.png")
+		boton_volver = load_texture("resources/imgs/boton_volver.png")
+		boton_jugar = load_texture("resources/imgs/boton_jugar_.png")
+		boton_niveles = load_texture("resources/imgs/boton_niveles.png")
 		
 		self.buttons_main = [
-			Button(-200, -50, 120, 40, "Jugar", self._on_jugar),
-			Button(0, -50, 250, 40, "Seleccionar Personaje", self._on_personaje),
-			Button(200, -50, 100, 40, "Niveles", self._on_niveles),
-			Button(-200, -230, 120, 40, "Salir", self._on_salir)
+			Button(0, 50, 172, 60, "", self._on_personaje, boton_inicio),
+			Button(400, -250, 162, 50, "", self._on_salir, boton_salir)
 		]
-		
+
 		self.buttons_personaje = [
 			Button(-200, -80, 200, 200, "Kevin", lambda: self._select_personaje(est.personajes[0])),
 			Button(0, -80, 200, 200, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
 			Button(200, -80, 200, 200, "Kenny", lambda: self._select_personaje(est.personajes[2])),
-			Button(-200, -230, 120, 40, "Volver", self._back_to_main)
+
+			Button(400, -250, 162, 50, "", self._back_to_main, boton_volver),
+			Button(-150, -230, 172, 60, "", self._on_jugar, boton_jugar),
+			Button(150, -230, 172, 60, "", self._on_niveles, boton_niveles)
 		]
 
 		self.buttons_niveles = [
 			Button(-200,-50, 100, 40, "Tutorial", lambda: self._select_nivel(0)),
 			Button(0,-50, 120, 40, "3 Discos", lambda: self._select_nivel(1)),
 			Button(200,-50, 100, 40, "4 Discos", lambda: self._select_nivel(2)),
-			Button(-200, -230, 120, 40, "Volver", self._back_to_main)
+			Button(400, -250, 162, 50, "", self._on_personaje, boton_volver)
 		]
 		
 		self.kevin = Kevin()
@@ -119,7 +164,7 @@ class Menu:
 	
 	def _select_nivel(self, nivel):
 		self.selected_nivel = nivel
-		self.state = est.estados_juego[0]
+		self.state = est.estados_juego[1]
 		est.nivel_sel = nivel
 
 	def _back_to_main(self):
@@ -184,24 +229,20 @@ class Menu:
 		glEnd()
 		glDisable(GL_BLEND)
 
+		glColor4f(1, 1, 1, 1)
 		if self.state == est.estados_juego[0]:
 			title = "MENU PRINCIPAL"
 		elif self.state == est.estados_juego[1]:
-			title = "SELECCIONAR PERSONAJE"
+			self._draw_textura_centrada(self.seleccionar_personaje, width, height, img_w = 750, img_h = 50, offset_y = 150) 
 		elif self.state == est.estados_juego[2]:
 			title = "SELECCIONAR NIVEL"
 		else:
 			title = ""
 
-		glColor3f(1, 1, 1)
-		glRasterPos2f(-len(title)*5 - 30, height/2 - 250)
-		for char in title:
-			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
-
 		if self.state == est.estados_juego[0]:
 			buttons = self.buttons_main
 		elif self.state == est.estados_juego[1]:
-			buttons = [b for b in self.buttons_personaje if b.label == "Volver"]
+			buttons = [b for b in self.buttons_personaje if b.label == "" or b.label == "Jugar" or b.label == "Niveles"]
 		elif self.state == est.estados_juego[2]:
 			buttons = self.buttons_niveles
 		else:
@@ -303,6 +344,43 @@ class Menu:
 		glTexCoord2f(1, 0); glVertex2f(width/2, -height/2)
 		glTexCoord2f(1, 1); glVertex2f(width/2, height/2)
 		glTexCoord2f(0, 1); glVertex2f(-width/2, height/2)
+		glEnd()
+
+		glBindTexture(GL_TEXTURE_2D, 0)
+		glDisable(GL_TEXTURE_2D)
+		glDisable(GL_BLEND)
+
+		glPopMatrix()
+		glMatrixMode(GL_PROJECTION)
+		glPopMatrix()
+		glMatrixMode(GL_MODELVIEW)
+
+	def _draw_textura_centrada(self, textura, width, height, img_w, img_h, offset_y=0):
+		glMatrixMode(GL_PROJECTION)
+		glPushMatrix()
+		glLoadIdentity()
+		glOrtho(-width/2, width/2, -height/2, height/2, -1, 1)
+
+		glMatrixMode(GL_MODELVIEW)
+		glPushMatrix()
+		glLoadIdentity()
+
+		glDisable(GL_LIGHTING)
+		glDisable(GL_DEPTH_TEST)
+		glEnable(GL_TEXTURE_2D)
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+		glBindTexture(GL_TEXTURE_2D, textura)
+
+		half_w = img_w / 2
+		half_h = img_h / 2
+
+		glBegin(GL_QUADS)
+		glTexCoord2f(0, 0); glVertex2f(-half_w, offset_y - half_h)
+		glTexCoord2f(1, 0); glVertex2f(half_w,  offset_y - half_h)
+		glTexCoord2f(1, 1); glVertex2f(half_w,  offset_y + half_h)
+		glTexCoord2f(0, 1); glVertex2f(-half_w, offset_y + half_h)
 		glEnd()
 
 		glBindTexture(GL_TEXTURE_2D, 0)

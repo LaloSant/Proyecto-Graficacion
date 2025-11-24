@@ -25,7 +25,7 @@ def render_text(x, y, text):
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char)) # type: ignore
 
 class MainWindow:
-	def __init__(self, width=800, height=600):
+	def __init__(self, width=1200, height=650):
 		self.width = width
 		self.height = height
 		self.lighting_manager = LightingManager()
@@ -230,7 +230,7 @@ class MainWindow:
 				glEnd()
 				# Borde botón derecho
 				glLineWidth(2)
-				glColor3f(1, 1, 1)
+				glColor3f(0,0,0)
 				glBegin(GL_LINE_LOOP)
 				glVertex2f(right_btn_x, btn_y)
 				glVertex2f(right_btn_x + btn_w, btn_y)
@@ -323,7 +323,7 @@ class MainWindow:
 			glMatrixMode(GL_PROJECTION)
 			glPushMatrix()
 			glLoadIdentity()
-			glOrtho(0, self.width, self.height, 0, -1, 1)
+			glOrtho(0, self.width, self.height, 0, -1, 1)	
 			glMatrixMode(GL_MODELVIEW)
 			glPushMatrix()
 			glLoadIdentity()

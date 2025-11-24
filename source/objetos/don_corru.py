@@ -10,7 +10,7 @@ import source.objetos.pers_args as pers_args
 class DonCorru(Objeto):
 
     def apagado(self, r, g, b):
-        gris = (r + g + b) // 30
+        gris = (r + g + b) // 90
         r2 = int(r * 0.4 + gris * 0.6)
         g2 = int(g * 0.4 + gris * 0.6)
         b2 = int(b * 0.4 + gris * 0.6)
