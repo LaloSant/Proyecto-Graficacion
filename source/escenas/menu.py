@@ -10,6 +10,7 @@ from source.objetos.kenny import Kenny
 import utils.estado as est
 import utils.texturas as text
 from utils.texturas import load_texture
+import utils.audio as audio
 
 
 
@@ -151,6 +152,7 @@ class Menu:
 		self.active = False
 
 	def _on_personaje(self):
+		est.audio.canal_audio_voz.stop()
 		self.state = est.estados_juego[1]
 
 	def _on_niveles(self):
@@ -170,6 +172,7 @@ class Menu:
 		est.nivel_sel = nivel
 
 	def _back_to_main(self):
+		est.audio.canal_audio_voz.stop()
 		self.state = est.estados_juego[0]
 
 	def update_mouse(self, x, y):

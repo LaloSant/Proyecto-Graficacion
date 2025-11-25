@@ -10,6 +10,7 @@ from utils.audio import Audio
 from utils.juego import *
 import utils.estado as est
 import utils.update as updt
+import utils.audio as audio
 
 from source.objetos.don_corru import DonCorru
 from source.objetos.kevin import Kevin
@@ -181,6 +182,7 @@ class MainWindow:
 			glEnd()
 			glLineWidth(1)
 			title = "NIVEL COMPLETADO!!"
+			est.audio.canal_audio_voz.stop()
 			glColor3f(1, 1, 1)
 			render_text(cx - len(title)*7, by + h - 200, title)
 			glColor3f(1, 1, 1)
@@ -211,8 +213,8 @@ class MainWindow:
 			glVertex2f(left_btn_x, btn_y + btn_h)
 			glEnd()
 			glLineWidth(1)
-			# Texto centrado botón izquierdo
-			label_left = "MENÚ PRINCIPAL"
+			# Texto centrado botón izquierda 
+			label_left = "MENÚ PRINCIPAL (P)"
 			tx = left_btn_x + btn_w//2 - int(len(label_left) * 4)
 			ty = btn_y + btn_h//2 + 6
 			glColor3f(1, 1, 1)
@@ -239,7 +241,7 @@ class MainWindow:
 				glEnd()
 				glLineWidth(1)
 				# Texto centrado botón derecho
-				label_right = "SIGUIENTE NIVEL"
+				label_right = "SIGUIENTE NIVEL (O)"
 				tx2 = right_btn_x + btn_w//2 - int(len(label_right) * 4)
 				y2 = btn_y + btn_h//2 + 6
 				glColor3f(1, 1, 1)
@@ -283,7 +285,7 @@ class MainWindow:
 			render_text(bx + 40, by + h - 120, f"MOVIMIENTOS: {est.total_movimientos_discos}")
 			render_text(bx + 40, by + h - 160, "PRESIONA ENTER PARA REINTENTAR")
 			
-			btn_w = 200
+			btn_w = 230
 			btn_h = 50
 			menu_btn_x = int(cx - btn_w/2)
 			btn_y = int(by + h - 80)
@@ -306,7 +308,7 @@ class MainWindow:
 			glEnd()
 			glLineWidth(1)
 			# Texto centrado botón
-			label = "MENÚ PRINCIPAL"
+			label = "MENÚ PRINCIPAL (P)"
 			tx = menu_btn_x + btn_w//2 - int(len(label) * 4)
 			ty = btn_y + btn_h//2 + 6
 			glColor3f(1, 1, 1)
