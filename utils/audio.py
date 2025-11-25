@@ -15,7 +15,7 @@ class Audio():
 		self.cancion_act = 0
 	
 		self.sonidos = [
-			self.load("resources/audio/menu.mp3")
+			self.load("resources/audio/menuAlt.mp3")
 			,self.load("resources/audio/nivel_1.mp3")
 			,self.load("resources/audio/nivel_2.mp3")
 			,self.load("resources/audio/nivel_3.mp3")
@@ -52,17 +52,17 @@ class Audio():
 	def musica_on(self, cancion:int):
 		self.cancion_act = cancion
 		sonido = self.sonidos[cancion]
-		sonido.set_volume(0.7)
+		sonido.set_volume(0.7) # type: ignore
 		if cancion == 4 or cancion == 6:
 			
-			self.canal_audio_musica.play(sonido, loops=0)
+			self.canal_audio_musica.play(sonido, loops=0) # type: ignore
 		else:
 			
-			self.canal_audio_musica.play(sonido, loops=-1) 
+			self.canal_audio_musica.play(sonido, loops=-1) # type: ignore
 
 	def play_narracion(self, num:int):
 		audio = self.sonidos_narracion[num]
-		self.canal_audio_voz.play(audio, loops=0)
+		self.canal_audio_voz.play(audio, loops=0) # type: ignore
 
 	def stop_narracion(self):
 		self.canal_audio_voz.stop()

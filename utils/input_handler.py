@@ -124,8 +124,8 @@ class InputHandler:
 			est.audio.canal_audio_voz.stop()
 		if key == 'm':
 			est.audio.toggle_musica()
-		if key == "w":
-			est.juego_completado = True
+		""" if key == "w":
+			est.juego_completado = True """
 		if not self.menu.active and est.caminando_pct == 0:
 			if key == 'a':
 				if est.posicion_pers_sel <= -1 or est.caminando_pct != 0:
@@ -254,9 +254,7 @@ class InputHandler:
 			menu_btn_x = int(cx - btn_w/2)
 			btn_y = int(by + h - 80)
 			
-			# Verificar click en Menú principal
 			if menu_btn_x <= x <= menu_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
-				# Volver al menú principal
 				self.menu.active = True
 				est.menu_activo = True
 				est.game_over = False
@@ -266,9 +264,11 @@ class InputHandler:
 				return
 
 		if button == 3:
-			self.estado.camera_z -= 0.5
+			if self.estado.camera_z > 1:
+				self.estado.camera_z -= 0.5
 		elif button == 4:
-			self.estado.camera_z += 0.5
+			if self.estado.camera_z < 20:
+				self.estado.camera_z += 0.5
 		
 		if button == GLUT_LEFT_BUTTON:
 			if state == GLUT_DOWN:
@@ -283,8 +283,9 @@ class InputHandler:
 		if self.mouse_down:
 			dx = x - self.last_mouse_x
 			dy = y - self.last_mouse_y
-			self.estado.camera_angle_y -= dx
-			self.estado.camera_angle_x += dy
+			self.estado.camera_angle_y -= dx * self.movement_speed
+			self.estado.camera_angle_x += dy * self.movement_speed
+			self.estado.camera_angle_x = max(0, min(90, self.estado.camera_angle_x))
 			self.last_mouse_x = x
 			self.last_mouse_y = y
 		glutPostRedisplay()
