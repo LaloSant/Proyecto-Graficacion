@@ -99,6 +99,8 @@ class Menu:
 		self.fondo_doncorru = load_texture("resources/imgs/DonCorruFondo.png")
 		self.fondo_kenny = load_texture("resources/imgs/KennyFondo.png")
 		self.seleccionar_personaje = load_texture("resources/imgs/seleccion_personajes.png")
+		self.derecha = load_texture("resources/imgs/derecha.png")
+		self.izquierda = load_texture("resources/imgs/izquierda.png")
 
 		self.active = True
 		self.state = est.estados_juego[0]  #["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
@@ -233,7 +235,9 @@ class Menu:
 		if self.state == est.estados_juego[0]:
 			title = "MENU PRINCIPAL"
 		elif self.state == est.estados_juego[1]:
-			self._draw_textura_centrada(self.seleccionar_personaje, width, height, img_w = 750, img_h = 50, offset_y = 150) 
+			self._draw_textura(self.seleccionar_personaje, width, height, img_w = 750, img_h = 50, offset_y = 150, offset_x = 0)
+			self._draw_textura(self.izquierda, width, height, img_w = 230, img_h = 80, offset_y = -60, offset_x = -375)
+			self._draw_textura(self.derecha, width, height, img_w = 230, img_h = 80, offset_y = -60, offset_x = 375)
 		elif self.state == est.estados_juego[2]:
 			title = "SELECCIONAR NIVEL"
 		else:
@@ -355,7 +359,7 @@ class Menu:
 		glPopMatrix()
 		glMatrixMode(GL_MODELVIEW)
 
-	def _draw_textura_centrada(self, textura, width, height, img_w, img_h, offset_y=0):
+	def _draw_textura(self, textura, width, height, img_w, img_h, offset_y=0, offset_x=0):
 		glMatrixMode(GL_PROJECTION)
 		glPushMatrix()
 		glLoadIdentity()
@@ -377,10 +381,10 @@ class Menu:
 		half_h = img_h / 2
 
 		glBegin(GL_QUADS)
-		glTexCoord2f(0, 0); glVertex2f(-half_w, offset_y - half_h)
-		glTexCoord2f(1, 0); glVertex2f(half_w,  offset_y - half_h)
-		glTexCoord2f(1, 1); glVertex2f(half_w,  offset_y + half_h)
-		glTexCoord2f(0, 1); glVertex2f(-half_w, offset_y + half_h)
+		glTexCoord2f(0, 0); glVertex2f(-half_w + offset_x, offset_y - half_h)
+		glTexCoord2f(1, 0); glVertex2f(half_w + offset_x, offset_y - half_h)
+		glTexCoord2f(1, 1); glVertex2f(half_w + offset_x, offset_y + half_h)
+		glTexCoord2f(0, 1); glVertex2f(-half_w + offset_x, offset_y + half_h)
 		glEnd()
 
 		glBindTexture(GL_TEXTURE_2D, 0)
