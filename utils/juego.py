@@ -1,6 +1,7 @@
 # utils/juego.py
 import utils.estado as est
 from source.objetos.disco import Disco
+import utils.audio as audio
 
 def agarrar_disco():
 	if len(est.piramides[est.posicion_pers_sel]) == 0:
@@ -69,6 +70,7 @@ class Nivel1(Nivel):
 
 	def reiniciar(self):
 		est.audio.musica_on(1)
+		est.audio.play_narracion(0)
 		est.discos = [Disco(1)
 					,Disco(2)
 					,Disco(3)

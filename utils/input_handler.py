@@ -83,7 +83,6 @@ class InputHandler:
 				glutPostRedisplay()
 				return
 
-				
 		if self.menu.active and self.menu.state == est.estados_juego[1]:
 			if key == 'a':
 				self._move_personaje(-1)

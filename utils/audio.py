@@ -6,7 +6,14 @@ class Audio():
 		pygame.mixer.init()
 		self.canal_audio_sfx = pygame.mixer.Channel(0)
 		self.canal_audio_musica = pygame.mixer.Channel(1)
+		self.canal_audio_voz = pygame.mixer.Channel(2)
+
+		self.canal_audio_musica.set_volume(0.4)
+		self.canal_audio_sfx.set_volume(0.4)
+		self.canal_audio_voz.set_volume(1.0)
+
 		self.cancion_act = 0
+	
 		self.sonidos = [
 			self.load("resources/audio/menu.mp3")
 			,self.load("resources/audio/nivel_1.mp3")
@@ -16,6 +23,11 @@ class Audio():
 			,self.load("resources/audio/click.mp3")
 			,self.load("resources/audio/game_over.mp3")
 		]
+
+		self.sonidos_narracion= [
+			self.load("resources/audio/tutorial_voz.mp3")
+		]
+
 		self.musica_on(self.cancion_act)
 	
 	def load(self, name):
@@ -47,6 +59,10 @@ class Audio():
 			
 			self.canal_audio_musica.play(sonido, loops=-1) 
 
+	def play_narracion(self, num:int):
+		audio = self.sonidos_narracion[num]
+		self.canal_audio_voz.play(audio, loops=0)
 
 	def musica_off(self):
 		self.canal_audio_musica.stop()
+		self.canal_audio_voz.stop()

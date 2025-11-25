@@ -28,9 +28,6 @@ class Button:
 		self.color_hover = (0.6, 0.6, 0.6)
 		self.color_text = (1.0, 1.0, 1.0)
 
-		self.px = 0
-		self.py = 0
-
 	def contains_point(self, mx, my):
 		return (self.x - self.width/2 <= mx <= self.x + self.width/2 and
 				self.y - self.height/2 <= my <= self.y + self.height/2)
@@ -116,6 +113,9 @@ class Menu:
 		boton_volver = load_texture("resources/imgs/boton_volver.png")
 		boton_jugar = load_texture("resources/imgs/boton_jugar.png")
 		boton_niveles = load_texture("resources/imgs/boton_niveles.png")
+		boton_tutorial = load_texture("resources/imgs/boton_tutorial.png")
+		boton_3_discos = load_texture("resources/imgs/boton_3_discos.png")
+		boton_4_discos = load_texture("resources/imgs/boton_4_discos.png")
 		
 		self.buttons_main = [
 			Button(0, 50, 200, 70, "", self._on_personaje, boton_inicio),
@@ -127,15 +127,15 @@ class Menu:
 			Button(0, -80, 200, 200, "Don Corru", lambda: self._select_personaje(est.personajes[1])),
 			Button(200, -80, 200, 200, "Kenny", lambda: self._select_personaje(est.personajes[2])),
 
-			Button(400, -250, 210, 50, "", self._back_to_main, boton_volver),
+			Button(400, -250, 162, 50 , "", self._back_to_main, boton_volver),
 			Button(-150, -230, 180, 60, "", self._on_jugar, boton_jugar),
 			Button(150, -230, 180, 60, "", self._on_niveles, boton_niveles)
 		]
 
 		self.buttons_niveles = [
-			Button(-200,-50, 100, 40, "Tutorial", lambda: self._select_nivel(0)),
-			Button(0,-50, 120, 40, "3 Discos", lambda: self._select_nivel(1)),
-			Button(200,-50, 100, 40, "4 Discos", lambda: self._select_nivel(2)),
+			Button(-220,-50,200, 70, "", lambda: self._select_nivel(0), boton_tutorial),
+			Button(0,-50, 200, 70, "", lambda: self._select_nivel(1), boton_3_discos),
+			Button(220,-50, 200, 70, "", lambda: self._select_nivel(2), boton_4_discos),
 			Button(400, -250, 162, 50, "", self._on_personaje, boton_volver)
 		]
 		
@@ -201,7 +201,7 @@ class Menu:
 		if self.state == est.estados_juego[1]:
 			fondo = self._get_fondo_actual()
 			if fondo:
-				self._draw_fondo_grande(fondo, width, height)
+				self._draw_fondo(fondo, width, height)
 
 			self._draw_personajes_3d(width, height)
 
@@ -321,7 +321,7 @@ class Menu:
 
 		return None
 
-	def _draw_fondo_grande(self, textura, width, height):
+	def _draw_fondo(self, textura, width, height):
 		glMatrixMode(GL_PROJECTION)
 		glPushMatrix()
 		glLoadIdentity()
