@@ -36,14 +36,14 @@ class InputHandler:
 		
 		# Permitir cerrar overlay de victoria con Enter
 		if key in ('\r', '\n'):
-			if est.juego_completado:
+			if est.juego_completado and not self.menu.active:
 				est.juego_completado = False
 				from utils.juego import Nivel1, Nivel2, Nivel3
 				niveles = [Nivel1(), Nivel2(), Nivel3()]
 				niveles[est.nivel_sel].reiniciar()
 				glutPostRedisplay()
 				return
-			elif est.game_over:
+			elif est.game_over and not self.menu.active:
 				# Reintentar nivel
 				est.game_over = False
 				pers_args.brazos_arriba =False
@@ -54,19 +54,21 @@ class InputHandler:
 				return
 			elif self.menu.active and self.menu.state == est.estados_juego[1]:
 				self.menu.active = False
+				est.menu_activo = False
 				from utils.juego import Nivel1, Nivel2, Nivel3
 				niveles = [Nivel1(), Nivel2(), Nivel3()]
 				niveles[est.nivel_sel].reiniciar()
 				glutPostRedisplay()
 				return
 			elif self.menu.active and self.menu.state == est.estados_juego[0]:
+				est.audio.sonido_corto(7)
 				self.menu.state = est.estados_juego[1]
 				glutPostRedisplay()
 				return
 		self.keys_pressed.add(key)
 
 		if est.juego_completado:
-			if key == 'o' and est.nivel_sel < 2: 
+			if key == 'o' and est.nivel_sel < 2 and not self.menu.active: 
 				next_lvl = min(est.nivel_sel + 1, 2)
 				if next_lvl == 0:
 					lvl = game.Nivel1()
@@ -112,11 +114,14 @@ class InputHandler:
 		
 		if key == 'q':
 			glutLeaveMainLoop()
-		if key == 'p' and not self.menu.active and est.game_over == False:
+		if key == 'p' and not self.menu.active:
+			est.game_over=False
 			pers_args.brazos_arriba = False
 			self.menu.active = True
+			est.menu_activo = True
 			self.estado_ventana = est.estados_juego[0]
 			est.audio.musica_on(0)
+			est.audio.canal_audio_voz.stop()
 		if key == 'm':
 			est.audio.toggle_musica()
 		if key == "w":
@@ -208,6 +213,7 @@ class InputHandler:
 			if left_btn_x <= x <= left_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
 				
 				self.menu.active = True
+				est.menu_activo = True
 				est.juego_completado = False
 				est.audio.musica_on(0)
 				glutPostRedisplay()
@@ -252,6 +258,7 @@ class InputHandler:
 			if menu_btn_x <= x <= menu_btn_x + btn_w and btn_y <= y <= btn_y + btn_h:
 				# Volver al menú principal
 				self.menu.active = True
+				est.menu_activo = True
 				est.game_over = False
 				est.juego_completado = False
 				est.audio.musica_on(0)

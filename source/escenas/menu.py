@@ -150,6 +150,7 @@ class Menu:
 		if self.on_jugar:
 			self.on_jugar()
 		self.active = False
+		est.menu_activo = False
 
 	def _on_personaje(self):
 		est.audio.canal_audio_voz.stop()

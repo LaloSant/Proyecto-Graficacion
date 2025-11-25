@@ -62,6 +62,7 @@ tiempo_limite = 0
 
 juego_completado = False
 game_over = False
+menu_activo = True
 estados_juego = ["Menu", "Sel_pers", "Sel_nivel", "Nivel_1", "Nivel_2", "Nivel_3"]
 
 personajes = ["Kevin", "Don_corru", "Kenny"]
@@ -73,4 +74,3 @@ nivel_sel = 0
 estados_pers = ["Estatico", "Caminando", "Brazos"]
 caminando_pct = 0
 estado_pers = [estados_pers[0], 0]	#estado, porcentaje
-

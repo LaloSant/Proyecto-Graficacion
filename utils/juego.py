@@ -66,7 +66,7 @@ class Nivel():
 
 class Nivel1(Nivel):
 	def __init__(self) -> None:
-		self.movimientos_optimos = 11
+		self.movimientos_optimos = 7
 
 	def reiniciar(self):
 		est.audio.musica_on(1)

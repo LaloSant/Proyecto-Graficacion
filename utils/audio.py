@@ -10,7 +10,7 @@ class Audio():
 
 		self.canal_audio_musica.set_volume(0.4)
 		self.canal_audio_sfx.set_volume(0.4)
-		self.canal_audio_voz.set_volume(1.0)
+		self.canal_audio_voz.set_volume(0.5)
 
 		self.cancion_act = 0
 	
@@ -22,6 +22,7 @@ class Audio():
 			,self.load("resources/audio/win.mp3")
 			,self.load("resources/audio/click.mp3")
 			,self.load("resources/audio/game_over.mp3")
+			,self.load("resources/audio/choose.mp3")
 		]
 
 		self.sonidos_narracion= [
@@ -62,6 +63,10 @@ class Audio():
 	def play_narracion(self, num:int):
 		audio = self.sonidos_narracion[num]
 		self.canal_audio_voz.play(audio, loops=0)
+
+	def stop_narracion(self):
+		self.canal_audio_voz.stop()
+
 
 	def musica_off(self):
 		self.canal_audio_musica.stop()

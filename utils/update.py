@@ -74,8 +74,8 @@ def disco_agarrado():
 		est.disco_agarrado.posicion = [est.posiciones_pers[est.posicion_pers_sel][0], est.posiciones_pers[est.posicion_pers_sel][1] + 1.7, est.posiciones_pers[est.posicion_pers_sel][2]]
 
 def actualizar_tiempo():
-	if est.tiempo_limite > 0 and not est.juego_completado:
-		est.tiempo_limite -= 0.016  
+	if not est.menu_activo and est.tiempo_limite > 0 and not est.juego_completado and est.nivel_sel in [1, 2]:
+		est.tiempo_limite -= 0.016
 		if est.tiempo_limite <= 0:
 			est.tiempo_limite = 0
 			est.game_over = True
