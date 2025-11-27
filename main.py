@@ -118,9 +118,47 @@ class MainWindow:
 		glDisable(GL_DEPTH_TEST)
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-		box_x, box_y = 20, 80
+		box_x, box_y = 20, 80 
 		box_height = 120
 		box_width = 300
+		#caja en la esquina superior derecha
+		if est.nivel_sel == 0:
+
+			box_height2 = 180
+			box_width2 = 450
+			box2_x = self.width - box_width2 - 20
+			box2_y = 20
+		    
+			glColor4f(0, 0, 0, 0.7)
+			glBegin(GL_QUADS)
+			glVertex2f(box2_x, box2_y)
+			glVertex2f(box2_x + box_width2, box2_y)
+			glVertex2f(box2_x + box_width2, box2_y + box_height2)
+			glVertex2f(box2_x, box2_y + box_height2)
+			glEnd()
+			
+			glColor4f(1, 1, 1, 1) 
+			glLineWidth(2)
+
+			glBegin(GL_LINE_LOOP)
+			glVertex2f(box2_x, box2_y)
+			glVertex2f(box2_x + box_width2, box2_y)
+			glVertex2f(box2_x + box_width2, box2_y + box_height2)
+			glVertex2f(box2_x, box2_y + box_height2)
+			glEnd()
+
+			glLineWidth(1)
+
+			render_text(box2_x + 10, box2_y + 30, "Ayuda: ")
+			render_text(box2_x + 30, box2_y + 55, "Objetivo del juego:")
+			render_text(box2_x + 50, box2_y + 75, "Mover todos los discos de la pirámide izquierda")
+			render_text(box2_x + 50, box2_y + 95, "a la pirámide derecha.")
+			render_text(box2_x + 30, box2_y + 115, "Controles:")
+			render_text(box2_x + 50, box2_y + 135, "1: Usa 'B' para sostener o soltar un disco.")
+			render_text(box2_x + 50, box2_y + 155, "2: No puedes colocar un disco más grande")
+			render_text(box2_x + 70, box2_y + 175, "sobre uno más pequeño.")
+
+
 		glColor4f(0, 0, 0, 0.7)
 		glBegin(GL_QUADS)
 		glVertex2f(box_x, box_y)
@@ -137,6 +175,7 @@ class MainWindow:
 		glVertex2f(box_x + box_width, box_y + box_height)
 		glVertex2f(box_x, box_y + box_height)
 		glEnd()
+		
 		glLineWidth(1)
 
 		text_y = box_y + 30
@@ -150,6 +189,7 @@ class MainWindow:
 		render_text(box_x + 10, text_y + 35, "Controles: ")
 		render_text(box_x + 30, text_y + 55, "a / d : Mover personaje")
 		render_text(box_x + 30, text_y + 75, "b : Agarrar o dejar disco")
+
 		if est.juego_completado:
 			text_y -= 25
 			cx = self.width // 2
