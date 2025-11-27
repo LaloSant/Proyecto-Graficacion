@@ -119,16 +119,16 @@ class MainWindow:
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		box_x, box_y = 20, 80 
-		box_height = 120
-		box_width = 300
+		box_height = 160 if est.mostrarControles else 55
+		box_width = 300 
 		#caja en la esquina superior derecha
 		if est.nivel_sel == 0:
 
-			box_height2 = 180
+			box_height2 = 210
 			box_width2 = 450
 			box2_x = self.width - box_width2 - 20
 			box2_y = 20
-		    
+
 			glColor4f(0, 0, 0, 0.7)
 			glBegin(GL_QUADS)
 			glVertex2f(box2_x, box2_y)
@@ -186,9 +186,12 @@ class MainWindow:
 			tiempo_texto = f"Tiempo: {int(est.tiempo_limite)}s"
 			glColor3f(1, 1, 1) if est.tiempo_limite > 10 else glColor3f(1, 0, 0)  
 			render_text(box_x + 10, text_y + 15, tiempo_texto)
-		render_text(box_x + 10, text_y + 35, "Controles: ")
-		render_text(box_x + 30, text_y + 55, "a / d : Mover personaje")
-		render_text(box_x + 30, text_y + 75, "b : Agarrar o dejar disco")
+		if est.mostrarControles:
+			render_text(box_x + 10, text_y + 35, "Controles: ")
+			render_text(box_x + 30, text_y + 55, "A / D : Mover personaje")
+			render_text(box_x + 30, text_y + 75, "B : Agarrar o dejar disco")
+			render_text(box_x + 30, text_y + 95, "P : Ir a menu")
+			render_text(box_x + 30, text_y + 115, "I : Mostrar / ocultar instrucciones")
 
 		if est.juego_completado:
 			text_y -= 25
@@ -226,7 +229,10 @@ class MainWindow:
 			glColor3f(1, 1, 1)
 			render_text(cx - len(title)*7, by + h - 200, title)
 			glColor3f(1, 1, 1)
-			puntaje = self.niveles[est.nivel_sel].movimientos_optimos / est.total_movimientos_discos * 100
+			if est.total_movimientos_discos == 0:
+				puntaje = 0
+			else:
+				puntaje = self.niveles[est.nivel_sel].movimientos_optimos / est.total_movimientos_discos * 100
 			render_text(bx + 40, by + h - 120, f"PUNTAJE: {puntaje:.2f}")
 			render_text(bx + 40, by + h - 160, f"CLASIFICACION: {self.niveles[est.nivel_sel].calcular_clasificacion(puntaje)}")
 			

@@ -69,6 +69,7 @@ class Nivel1(Nivel):
 		self.movimientos_optimos = 7
 
 	def reiniciar(self):
+		est.mostrarControles = True
 		est.audio.musica_on(1)
 		est.audio.play_narracion(0)
 		est.discos = [Disco(1)

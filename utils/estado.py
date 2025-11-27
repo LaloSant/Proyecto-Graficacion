@@ -56,6 +56,7 @@ disco_agarrado:Disco = None # type: ignore
 
 audio:Audio
 
+mostrarControles = True
 
 total_movimientos_discos = 0
 tiempo_limite = 0  

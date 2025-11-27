@@ -124,6 +124,8 @@ class InputHandler:
 			est.audio.canal_audio_voz.stop()
 		if key == 'm':
 			est.audio.toggle_musica()
+		if key == 'i':
+			est.mostrarControles = not est.mostrarControles
 		""" if key == "w":
 			est.juego_completado = True """
 		if not self.menu.active and est.caminando_pct == 0:
