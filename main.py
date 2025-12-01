@@ -424,6 +424,26 @@ class MainWindow:
 			glDisable(GL_TEXTURE_2D)
 			glDisable(GL_BLEND)
 
+			# Créditos en la parte inferior
+			glDisable(GL_TEXTURE_2D)
+			glColor3f(1, 1, 1)
+			
+			# Título de créditos
+			creditos_titulo = "CRÉDITOS"
+			render_text((self.width - len(creditos_titulo) * 7) - 1500 // 2, self.height - 30, creditos_titulo)
+			
+			# Nombres de los desarrolladores
+			nombres = [
+				"Bautista Santiesteban Eduardo Jair",
+				"Farfan Gomez Alan Daniel",
+				"Sampayo Marin Yael"
+			]
+			
+			y_pos = self.height - 55
+			for nombre in nombres:
+				render_text((self.width - len(nombre) * 4) // 2, y_pos, nombre)
+				y_pos += 20
+
 			glEnable(GL_DEPTH_TEST)
 			glEnable(GL_LIGHTING)
 			glPopMatrix()
