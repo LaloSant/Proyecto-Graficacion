@@ -123,6 +123,8 @@ class Nivel3(Nivel):
 		self.movimientos_optimos = 15
 	
 	def reiniciar(self):
+		print("Reincidando")
+		est.juego_completado = False
 		est.audio.musica_on(3)
 		est.discos = [Disco(1)
 						,Disco(2)
